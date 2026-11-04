@@ -1,0 +1,34 @@
+﻿<local:MyPageRight x:Class="PCL.PageInstanceKeybinding"
+                   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                   xmlns:local="clr-namespace:PCL"
+                   xmlns:loc="https://ce.pclc.cc/core/localization"
+                   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                   mc:Ignorable="d"
+                   PanScroll="{Binding ElementName=PanBack}"
+                   d:DesignHeight="450" d:DesignWidth="800">
+    <local:MyScrollViewer x:Name="PanBack" VerticalScrollBarVisibility="Auto"
+                          HorizontalScrollBarVisibility="Disabled">
+        <StackPanel Margin="25,20,25,25">
+            <local:MyCard Title="{loc:Loc Instance.Keybinding.Title}">
+                <StackPanel Margin="15,40,25,16">
+                    <TextBlock Margin="0,0,0,12" TextWrapping="Wrap" Opacity="0.75"
+                               Text="{loc:Loc Instance.Keybinding.Description}" />
+                    <local:MySearchBox x:Name="SearchBox" Margin="0,0,0,10"
+                                       HintText="{loc:Loc Instance.Keybinding.SearchHint}"
+                                       TextChanged="SearchChanged" />
+                    <local:MyCheckBox x:Name="CheckConflicts" Text="{loc:Loc Instance.Keybinding.ConflictsOnly}"
+                                      Change="ConflictsChanged" />
+                </StackPanel>
+            </local:MyCard>
+
+            <local:MyCard Margin="0,15,0,0" Title="{loc:Loc Instance.Keybinding.ListTitle}">
+                <StackPanel Margin="15,40,25,16">
+                    <TextBlock x:Name="LabStatus" Margin="0,0,0,8" TextWrapping="Wrap" Opacity="0.75" />
+                    <StackPanel x:Name="PanKeys" />
+                </StackPanel>
+            </local:MyCard>
+        </StackPanel>
+    </local:MyScrollViewer>
+</local:MyPageRight>

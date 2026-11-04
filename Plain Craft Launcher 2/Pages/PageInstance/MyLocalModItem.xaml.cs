@@ -1,0 +1,907 @@
+using Microsoft.VisualBasic;
+using PCL.Core.App;
+using PCL.Core.App.Localization;
+using PCL.Core.UI.Dialogs;
+using PCL.Core.Utils.Exts;
+using System.IO;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Input;
+using System.Windows.Media;
+
+namespace PCL;
+
+public partial class MyLocalCompItem
+{
+    private readonly MyLocalModItemViewModel _vm = new();
+
+    public MyLocalModItemViewModel ViewModel => _vm;
+
+    private string? _displayVersion;
+
+    private string GetUpdateCompareDescription()
+    {
+        _displayVersion = null;
+        var currentName = Entry.CompFile.FileName.Replace(".jar", "");
+        var newestName = Entry.UpdateFile.FileName.Replace(".jar", "");
+        // 简化名称对比
+        var currentSegs = currentName.Split('-').ToList();
+        var newestSegs = newestName.Split('-').ToList();
+        var shortened = false;
+        foreach (var seg in currentSegs.ToList())
+        {
+            if (!newestSegs.Contains(seg))
+                continue;
+            currentSegs.Remove(seg);
+            newestSegs.Remove(seg);
+            shortened = true;
+        }
+
+        if (shortened && currentSegs.Any() && newestSegs.Any())
+        {
+            currentName = currentSegs.Join("-");
+            newestName = newestSegs.Join("-");
+            _displayVersion = currentName;
+        }
+
+        return
+            Lang.Text("Instance.Resource.Item.UpdateCompare", currentName, Lang.TimeSpan(Entry.CompFile.ReleaseDate - DateTime.Now), newestName, Lang.TimeSpan(Entry.UpdateFile.ReleaseDate - DateTime.Now));
+    }
+
+    public void Refresh()
+    {
+        Dispatcher.BeginInvoke(new Func<Task>(async () =>
+        {
+            // 更新
+            if (Entry.CanUpdate)
+            {
+                _vm.UpdateVisibility = Visibility.Visible;
+                _vm.UpdateToolTip = $"{GetUpdateCompareDescription()}\r\n{Lang.Text("Instance.Resource.Item.UpdateToolTip")}";
+            }
+            else
+            {
+                _vm.UpdateVisibility = Visibility.Collapsed;
+                _displayVersion = null;
+            }
+
+            // 标题与描述
+            string descFileName;
+            if (Entry.IsFolder)
+                // 文件夹项的特殊处理
+                descFileName = Entry.Name;
+            else
+                switch (Entry.State)
+                {
+                    case LocalComp.LocalCompFile.LocalFileStatus.Fine:
+                        {
+                            descFileName = Path.GetFileNameWithoutExtension(Entry.path);
+                            break;
+                        }
+                    case LocalComp.LocalCompFile.LocalFileStatus.Disabled:
+                        {
+                            descFileName =
+                                Path.GetFileNameWithoutExtension(Entry.path.Replace(".disabled", "")
+                                    .Replace(".old", "")); // McMod.McModState.Unavailable
+                            break;
+                        }
+
+                    default:
+                        {
+                            descFileName = Common.GetFileNameFromPath(Entry.path);
+                            break;
+                        }
+                }
+
+            string newDescription;
+            var displayVersion = _displayVersion ?? Entry.Version;
+            var compTemp = Entry.Comp;
+            if (Entry.IsFolder)
+            {
+                // 文件夹项的特殊显示
+                Title = Entry.Name;
+                newDescription = Entry.Description;
+            }
+            else if (Config.Download.Comp.UiCompNameSolution == 1)
+            {
+                // 标题显示文件名，详情显示译名
+                // 标题
+                Title = descFileName;
+                SubTitle = "";
+                // 描述
+                if (Entry.Comp is null)
+                {
+                    newDescription = Entry.Name;
+                }
+                else
+                {
+                    var titles = await Task.Run(() => compTemp.GetControlTitle(false)).ConfigureAwait(true);
+                    newDescription = titles.Key + titles.Value;
+                }
+
+                newDescription = newDescription.Replace("  |  ", " / ");
+                if (displayVersion is not null)
+                    newDescription += $" ({displayVersion})";
+            }
+            else
+            {
+                // 标题显示译名，详情显示文件名
+                // 标题
+                if (Entry.Comp is null)
+                {
+                    Title = Entry.Name;
+                    SubTitle = displayVersion is null ? "" : "  |  " + displayVersion;
+                }
+                else
+                {
+                    var titles = await Task.Run(() => compTemp.GetControlTitle(false)).ConfigureAwait(true);
+                    Title = titles.Key;
+                    SubTitle = titles.Value + (displayVersion is null ? "" : "  |  " + displayVersion);
+                }
+
+                // 描述
+                newDescription = descFileName;
+            }
+
+            if (Entry.Comp is not null)
+                newDescription += ": " + Entry.Comp.Description.Replace("\r", "").Replace("\n", "");
+            else if (Entry.Description is not null)
+                newDescription += ": " + Entry.Description.Replace("\r", "").Replace("\n", "");
+            else if (!Entry.IsFileAvailable) newDescription += ": " + Lang.Text("Instance.Resource.Item.InfoUnavailable");
+            Description = newDescription;
+            if (Checked)
+                LabTitle.SetResourceReference(TextBlock.ForegroundProperty,
+                    Entry.State == LocalComp.LocalCompFile.LocalFileStatus.Fine
+                        ? "ColorBrush2"
+                        : "ColorBrush5");
+            else
+                LabTitle.SetResourceReference(TextBlock.ForegroundProperty,
+                    Entry.State == LocalComp.LocalCompFile.LocalFileStatus.Fine
+                        ? "ColorBrush1"
+                        : "ColorBrushGray4");
+            // 主 Logo
+            Logo = Entry.GetLogo();
+
+            // 图标右下角的 Logo
+            if (Entry.State == LocalComp.LocalCompFile.LocalFileStatus.Fine)
+            {
+                if (_imgState is not null)
+                {
+                    Children.Remove(_imgState);
+                    _imgState = null;
+                }
+            }
+            else
+            {
+                if (_imgState is null)
+                {
+                    _imgState = new Image
+                    {
+                        Width = 20d,
+                        Height = 20d,
+                        Margin = new Thickness(0d, 0d, -5, -3),
+                        IsHitTestVisible = false,
+                        HorizontalAlignment = HorizontalAlignment.Right,
+                        VerticalAlignment = VerticalAlignment.Bottom
+                    };
+                    RenderOptions.SetBitmapScalingMode(_imgState, BitmapScalingMode.HighQuality);
+                    SetColumn(_imgState, 1);
+                    SetRow(_imgState, 1);
+                    SetRowSpan(_imgState, 2);
+                    Children.Add(_imgState);
+                    // <Image x:Name="ImgState" RenderOptions.BitmapScalingMode="HighQuality" Width="16" Height="16" Margin="0,0,-3,-1"
+                    // Grid.Column="1" Grid.Row="1" Grid.RowSpan="2" IsHitTestVisible="False"
+                    // HorizontalAlignment="Right" VerticalAlignment="Bottom"
+                    // Source="/Images/Icons/Unavailable.png" />
+                }
+
+                _imgState.Source = new MyBitmap(Common.PathImage + $"Icons/{Entry.State}.png");
+            }
+
+            // 标签
+            if (Entry.IsFolder)
+                // 为文件夹添加标签
+                Tags = [Lang.Text("Instance.Resource.Item.FolderTag")];
+            else if (Entry.Comp is not null) Tags = Entry.Comp.Tags;
+        }));
+    }
+
+    public void RefreshColor(object sender, EventArgs e)
+    {
+        InitLate(sender, e);
+        // 触发颜色动画
+        var time = IsMouseOver ? 120 : 180;
+        var ani = new List<Animations.AniData>();
+        // ButtonStack
+        if (buttonStack is not null)
+        {
+            if (IsMouseOver)
+            {
+                ani.Add(Animations.AaOpacity(buttonStack, 1d - buttonStack.Opacity,
+                    (int)Math.Round(time * 0.7d),
+                    (int)Math.Round(time * 0.3d)));
+                ani.Add(Animations.AaDouble(
+                    i => ColumnPaddingRight.Width =
+                        new GridLength(Math.Max(0, ColumnPaddingRight.Width.Value + (double)i)),
+                    5 + Buttons.Count() * 25 - ColumnPaddingRight.Width.Value, (int)Math.Round(time * 0.3d),
+                    (int)Math.Round(time * 0.7d)));
+            }
+            else
+            {
+                ani.Add(Animations.AaOpacity(buttonStack, -buttonStack.Opacity,
+                    (int)Math.Round(time * 0.4d)));
+                ani.Add(Animations.AaDouble(
+                    i => ColumnPaddingRight.Width =
+                        new GridLength(Math.Max(0, ColumnPaddingRight.Width.Value + (double)i)),
+                    4d - ColumnPaddingRight.Width.Value, (int)Math.Round(time * 0.4d)));
+            }
+        }
+
+        // RectBack
+        if (IsMouseOver || Checked)
+        {
+            ani.AddRange([
+                Animations.AaColor(RectBack, Border.BackgroundProperty,
+                    _isMouseDown ? "ColorBrush6" : "ColorBrushBg1",
+                    time),
+                Animations.AaOpacity(RectBack, 1d - RectBack.Opacity, time,
+                    ease: new Animations.AniEaseOutFluent())
+            ]);
+            if (_isMouseDown)
+                ani.Add(Animations.AaScaleTransform(RectBack,
+                    0.996d - ((ScaleTransform)RectBack.RenderTransform).ScaleX, (int)Math.Round(time * 1.2d),
+                    ease: new Animations.AniEaseOutFluent()));
+            else
+                ani.Add(Animations.AaScaleTransform(RectBack,
+                    1d - ((ScaleTransform)RectBack.RenderTransform).ScaleX,
+                    (int)Math.Round(time * 1.2d), ease: new Animations.AniEaseOutFluent()));
+        }
+        else
+        {
+            ani.AddRange([
+                Animations.AaOpacity(RectBack, -RectBack.Opacity, time),
+                Animations.AaScaleTransform(RectBack,
+                    0.996d - ((ScaleTransform)RectBack.RenderTransform).ScaleX,
+                    time, ease: new Animations.AniEaseOutFluent()),
+                Animations.AaScaleTransform(RectBack, -0.196d, 1, after: true)
+            ]);
+        }
+
+        Animations.AniStart(ani, "LocalModItem Color " + Uuid);
+    }
+
+    // 触发虚拟化内容
+    private void InitLate(object sender, EventArgs e)
+    {
+        if (buttonHandler is not null)
+        {
+            buttonHandler((MyLocalCompItem)sender, e);
+            buttonHandler = null;
+        }
+    }
+
+    // 显示更新日志
+    private void BtnUpdate_PreviewMouseRightButtonUp(object sender, MouseButtonEventArgs e)
+    {
+        e.Handled = true;
+        ShowUpdateLog();
+    }
+
+    private void ShowUpdateLog()
+    {
+        if (Entry.Comp is not null)
+        {
+            if (!Information.IsNumeric(Entry.Comp.Id))
+            {
+                var modrinthUrl = Entry.ChangelogUrls.FirstOrDefault(x => x.Contains("modrinth.com"));
+                if (modrinthUrl is not null)
+                {
+                    Common.OpenWebsite(modrinthUrl);
+                    return;
+                }
+            }
+            else
+            {
+                var curseForgeUrl = Entry.ChangelogUrls.FirstOrDefault(x => x.Contains("curseforge.com"));
+                if (curseForgeUrl is not null)
+                {
+                    Common.OpenWebsite(curseForgeUrl);
+                    return;
+                }
+            }
+        }
+
+        Common.Log(
+            Lang.Text("Instance.Resource.Item.OpenChangelogFailed"),
+            Common.LogLevel.Hint,
+            userSummary: Lang.Text("Instance.Resource.Item.OpenChangelogFailed"));
+    }
+
+    // 触发更新
+    private void BtnUpdate_Click(object sender, EventArgs e)
+    {
+        switch ((DialogService.Instance.Show(new TextDialogRequest
+        {
+            Title = Lang.Text("Instance.Resource.Item.UpdateConfirm.Title"),
+            Content = $"{Lang.Text("Instance.Resource.Item.UpdateConfirm.Message", Entry.Name)}\r\n\r\n{GetUpdateCompareDescription()}",
+            Buttons = DialogButtons.Create("Instance.Resource.Item.Update", "Instance.Resource.Item.ViewChangelog", "Common.Action.Cancel"),
+            ForceWait = true
+        }).Result?.Button ?? 0))
+        {
+            case 1: // 更新
+                {
+                    switch (Entry.Comp.Type)
+                    {
+                        case Comp.CompType.Mod:
+                            {
+                                Launcher.frmInstanceMod ??= new PageInstanceCompResource(Comp.CompType.Mod);
+                                Launcher.frmInstanceMod.UpdateResource([Entry]);
+                                break;
+                            }
+                        case Comp.CompType.ResourcePack:
+                            {
+                                Launcher.frmInstanceResourcePack ??=
+                                    new PageInstanceCompResource(Comp.CompType.ResourcePack);
+                                Launcher.frmInstanceResourcePack.UpdateResource([Entry]);
+                                break;
+                            }
+                        case Comp.CompType.Shader:
+                            {
+                                Launcher.frmInstanceShader ??=
+                                    new PageInstanceCompResource(Comp.CompType.Shader);
+                                Launcher.frmInstanceShader.UpdateResource([Entry]);
+                                break;
+                            }
+                        case Comp.CompType.DataPack:
+                            {
+                                Launcher.frmInstanceSavesDatapack ??= new PageInstanceSavesDatapack();
+                                Launcher.frmInstanceSavesDatapack.UpdateResource([Entry]);
+                                break;
+                            }
+                    }
+
+                    break;
+                }
+            case 2: // 查看更新日志
+                {
+                    ShowUpdateLog();
+                    break;
+                }
+            case 3: // 取消
+                {
+                    break;
+                }
+        }
+    }
+
+    // 自适应（#4465）
+    private void PanTitle_SizeChanged(object sender, SizeChangedEventArgs sizeChangedEventArgs)
+    {
+        // 0：全部舒展：Auto - Auto - (Auto) - 1*
+        // 1：压缩 Subtitle：Auto - 1* - (Auto) - 0
+        // 2：继续压缩 Title：1* - 0 - (Auto) - 0
+        var currentCompressLevel =
+            _vm.ColumnExtendWidth.IsStar ? 0 : _vm.ColumnTitleWidth.IsStar ? 2 : 1; // Subtitle 可能是 Collapsed
+        var newCompressLevel = 0;
+        switch (currentCompressLevel)
+        {
+            case 0:
+                {
+                    if (ColumnExtend.ActualWidth < 0.5d)
+                        newCompressLevel = LabSubtitle.Visibility == Visibility.Collapsed ? 2 : 1;
+                    else
+                        return;
+
+                    break;
+                }
+            case 1:
+                {
+                    if (ColumnSubtitle.ActualWidth < 0.5d)
+                        newCompressLevel = 2;
+                    else if (!LabSubtitle.IsTextTrimmed())
+                        newCompressLevel = 0;
+                    else
+                        return;
+
+                    break;
+                }
+            case 2:
+                {
+                    if (!LabTitle.IsTextTrimmed())
+                        newCompressLevel = LabSubtitle.Visibility == Visibility.Collapsed ? 0 : 1;
+                    else
+                        return;
+
+                    break;
+                }
+        }
+
+        switch (newCompressLevel)
+        {
+            case 0:
+                {
+                    // 全部舒展：Auto - Auto - (Auto) - 1*
+                    _vm.ColumnTitleWidth = GridLength.Auto;
+                    _vm.ColumnSubtitleWidth = GridLength.Auto;
+                    _vm.ColumnExtendWidth = new GridLength(1d, GridUnitType.Star);
+                    break;
+                }
+            case 1:
+                {
+                    // 压缩 Subtitle：Auto - 1* - (Auto) - 0
+                    _vm.ColumnTitleWidth = GridLength.Auto;
+                    _vm.ColumnSubtitleWidth = new GridLength(1d, GridUnitType.Star);
+                    _vm.ColumnExtendWidth = new GridLength(0d, GridUnitType.Pixel);
+                    break;
+                }
+            case 2:
+                {
+                    // 继续压缩 Title：1* - 0 - (Auto) - 0
+                    _vm.ColumnTitleWidth = new GridLength(1d, GridUnitType.Star);
+                    _vm.ColumnSubtitleWidth = new GridLength(0d, GridUnitType.Pixel);
+                    _vm.ColumnExtendWidth = new GridLength(0d, GridUnitType.Pixel);
+                    break;
+                }
+        }
+    }
+
+    #region 基础属性
+
+    public readonly int Uuid = Common.GetUuid();
+
+    // Logo
+    public string Logo
+    {
+        get => PathLogo.Source;
+        set => PathLogo.Source = value;
+    }
+
+    // 标题
+    public string Title
+    {
+        get;
+        set
+        {
+            var rawValue = value;
+            switch (Entry.State)
+            {
+                case LocalComp.LocalCompFile.LocalFileStatus.Fine:
+                    {
+                        LabTitle.TextDecorations = null;
+                        break;
+                    }
+                case LocalComp.LocalCompFile.LocalFileStatus.Disabled:
+                    {
+                        LabTitle.TextDecorations = TextDecorations.Strikethrough;
+                        break;
+                    }
+                case LocalComp.LocalCompFile.LocalFileStatus.Unavailable:
+                    {
+                        LabTitle.TextDecorations = TextDecorations.Strikethrough;
+                        value += Lang.Text("Instance.Resource.Item.ErrorSuffix");
+                        break;
+                    }
+            }
+
+            if (_vm.TitleText == value)
+                return;
+            _vm.TitleText = value;
+            field = rawValue;
+        }
+    }
+
+    // 副标题
+    public string? SubTitle
+    {
+        get => _vm.SubTitleText;
+        set
+        {
+            if (_vm.SubTitleText == (value ?? ""))
+                return;
+            _vm.SubTitleText = value;
+            _vm.SubTitleVisibility = string.IsNullOrEmpty(value) ? Visibility.Collapsed : Visibility.Visible;
+        }
+    }
+
+    // 描述
+    public string Description
+    {
+        get => _vm.DescriptionText;
+        set
+        {
+            if ((_vm.DescriptionText ?? "") == (value ?? ""))
+                return;
+            _vm.DescriptionText = value;
+        }
+    }
+
+    // Tag
+    public List<string> Tags
+    {
+        set
+        {
+            PanTags.Children.Clear();
+            _vm.TagsVisibility = value.Any() ? Visibility.Visible : Visibility.Collapsed;
+            foreach (var tagText in value)
+            {
+                var newTag = new Border
+                {
+                    Background = new SolidColorBrush(Color.FromArgb(12, 0, 0, 0)),
+                    Padding = new Thickness(3d, 1d, 3d, 1d),
+                    CornerRadius = new CornerRadius(3d),
+                    Margin = new Thickness(0d, 0d, 3d, 0d),
+                    SnapsToDevicePixels = true,
+                    UseLayoutRounding = false
+                };
+                var tagTextBlock = new TextBlock
+                {
+                    Text = tagText,
+                    Foreground = new SolidColorBrush(ThemeManager.IsDarkMode
+                        ? Color.FromArgb(88, 255, 255, 255)
+                        : Color.FromArgb(88, 136, 136, 136)),
+                    FontSize = 11d
+                };
+                newTag.Child = tagTextBlock;
+                PanTags.Children.Add(newTag);
+            }
+        }
+    }
+
+    // 相关联的 Mod
+    public LocalComp.LocalCompFile Entry
+    {
+        get => (LocalComp.LocalCompFile)Tag;
+        set => Tag = value;
+    }
+
+    #endregion
+
+    #region 点击与勾选
+
+    // 触发点击事件
+    public event ClickEventHandler? Click;
+
+    public delegate void ClickEventHandler(object sender, MouseButtonEventArgs e);
+
+    public MyLocalCompItem()
+    {
+        InitializeComponent();
+        PreviewMouseLeftButtonUp += Button_MouseUp;
+        PreviewMouseLeftButtonDown += Button_MouseDown;
+        MouseLeave += Button_MouseLeave;
+        PreviewMouseLeftButtonUp += Button_MouseLeave;
+        MouseLeftButtonDown += Button_MouseSwipeStart;
+        MouseEnter += Button_MouseSwipe;
+        MouseLeave += Button_MouseSwipe;
+        MouseLeftButtonUp += Button_MouseSwipe;
+        Loaded += (_, _) => Refresh();
+        MouseEnter += RefreshColor;
+        MouseLeave += RefreshColor;
+        MouseLeftButtonDown += RefreshColor;
+        MouseLeftButtonUp += RefreshColor;
+        Changed += RefreshColor;
+        // Handles
+    }
+
+    private void Button_MouseUp(object sender, MouseButtonEventArgs e)
+    {
+        if (_isMouseDown)
+        {
+            Click?.Invoke(sender, e);
+            if (e.Handled)
+                return;
+            Common.Log("[Control] 按下本地 Mod 列表项：" + LabTitle.Text);
+        }
+    }
+
+    // 鼠标点击判定
+    private bool _isMouseDown;
+
+    private void Button_MouseDown(object sender, MouseButtonEventArgs e)
+    {
+        if (!IsMouseDirectlyOver)
+            return;
+        _isMouseDown = true;
+        buttonStack?.IsHitTestVisible = false;
+    }
+
+    private void Button_MouseLeave(object sender, object e)
+    {
+        _isMouseDown = false;
+        buttonStack?.IsHitTestVisible = true;
+    }
+
+    // 滑动选中
+    public class SwipeSelect
+    {
+        public int Start { get; set; }
+        public int End { get; set; }
+
+        public bool Swiping
+        {
+            get;
+            set
+            {
+                field = value;
+                if (TargetFrm is not null)
+                    try
+                    {
+                        var cardSelect = Interaction.CallByName(TargetFrm, "CardSelect", CallType.Get);
+                        Interaction.CallByName(cardSelect, "IsHitTestVisible", CallType.Set, !value);
+                    }
+                    catch
+                    {
+                    }
+            }
+        }
+
+        public bool SwipeToState { get; set; }
+        public object TargetFrm { get; set; }
+    }
+
+    public SwipeSelect CurrentSwipe { get; set; }
+
+    private void Button_MouseSwipeStart(object sender, object e)
+    {
+        if (Parent is null)
+            return; // Mod 可能已被删除（#3824）
+        // 开始滑动
+        var index = ((StackPanel)Parent).Children.IndexOf(this);
+        CurrentSwipe.Start = index;
+        CurrentSwipe.End = index;
+        CurrentSwipe.Swiping = true;
+        CurrentSwipe.SwipeToState = !Checked;
+    }
+
+    private void Button_MouseSwipe(object sender, object e)
+    {
+        if (Parent is null)
+            return; // Mod 可能已被删除（#3824）
+        // 结束滑动
+        if (Mouse.LeftButton != MouseButtonState.Pressed || !(Mouse.DirectlyOver is MyLocalCompItem)) // #5771
+        {
+            CurrentSwipe.Swiping = false;
+            return;
+        }
+
+        // 计算滑动范围
+        var elements = ((StackPanel)Parent).Children;
+        var index = elements.IndexOf(this);
+        CurrentSwipe.Start =
+            (int)Math.Round(Common.MathClamp(Math.Min(CurrentSwipe.Start, index), 0d,
+                elements.Count - 1));
+        CurrentSwipe.End =
+            (int)Math.Round(Common.MathClamp(Math.Max(CurrentSwipe.End, index), 0d,
+                elements.Count - 1));
+        // 勾选所有范围中的项
+        if (CurrentSwipe.Start == CurrentSwipe.End)
+            return;
+        for (int i = CurrentSwipe.Start, loopTo = CurrentSwipe.End; i <= loopTo; i++)
+        {
+            var item = (MyLocalCompItem)elements[i];
+            item.InitLate(item, (EventArgs)e);
+            item.Checked = CurrentSwipe.SwipeToState;
+        }
+    }
+
+    // 勾选状态
+    public event CheckEventHandler? Check;
+
+    public delegate void CheckEventHandler(object sender, Common.RouteEventArgs e);
+
+    public event ChangedEventHandler? Changed;
+
+    public delegate void ChangedEventHandler(object sender, Common.RouteEventArgs e);
+
+    public bool Checked
+    {
+        get => field;
+        set
+        {
+            try
+            {
+                // 触发属性值修改
+                var rawValue = field;
+                if (value == field)
+                    return;
+                field = value;
+                var changedEventArgs = new Common.RouteEventArgs();
+                if (IsInitialized)
+                {
+                    Changed?.Invoke(this, changedEventArgs);
+                    if (changedEventArgs.handled)
+                    {
+                        field = rawValue;
+                        return;
+                    }
+                }
+
+                if (value)
+                {
+                    var checkEventArgs = new Common.RouteEventArgs();
+                    Check?.Invoke(this, checkEventArgs);
+                    if (checkEventArgs.handled)
+                        return;
+                }
+
+                // 更改动画
+                if (this.IsVisibleInWindow(Launcher.frmMain))
+                {
+                    var anim = new List<Animations.AniData>();
+                    if (Checked)
+                    {
+                        // 由无变有
+                        var delta = 32d - RectCheck.ActualHeight;
+                        anim.Add(Animations.AaHeight(RectCheck, delta * 0.4d, 200,
+                            ease: new Animations.AniEaseOutFluent(Animations.AniEasePower.Weak)));
+                        anim.Add(Animations.AaHeight(RectCheck, delta * 0.6d, 300,
+                            ease: new Animations.AniEaseOutBack(Animations.AniEasePower.Weak)));
+                        anim.Add(Animations.AaOpacity(RectCheck, 1d - RectCheck.Opacity, 30));
+                        RectCheck.VerticalAlignment = VerticalAlignment.Center;
+                        RectCheck.Margin = new Thickness(-3, 0d, 0d, 0d);
+                        anim.Add(Animations.AaColor(LabTitle, TextBlock.ForegroundProperty,
+                            Entry.State == LocalComp.LocalCompFile.LocalFileStatus.Fine
+                                ? "ColorBrush2"
+                                : "ColorBrush5", 200));
+                    }
+                    else
+                    {
+                        // 由有变无
+                        anim.Add(Animations.AaHeight(RectCheck, -RectCheck.ActualHeight, 120,
+                            ease: new Animations.AniEaseInFluent(Animations.AniEasePower.Weak)));
+                        anim.Add(Animations.AaOpacity(RectCheck, -RectCheck.Opacity, 70, 40));
+                        RectCheck.VerticalAlignment = VerticalAlignment.Center;
+                        anim.Add(Animations.AaColor(LabTitle, TextBlock.ForegroundProperty,
+                            LabTitle.TextDecorations is null ? "ColorBrush1" : "ColorBrushGray4", 120));
+                    }
+
+                    Animations.AniStart(anim, "MyLocalCompItem Checked " + Uuid);
+                }
+                else
+                {
+                    // 不在窗口上时直接设置
+                    RectCheck.VerticalAlignment = VerticalAlignment.Center;
+                    RectCheck.Margin = new Thickness(-3, 0d, 0d, 0d);
+                    if (Checked)
+                    {
+                        RectCheck.Height = 32d;
+                        RectCheck.Opacity = 1d;
+                        LabTitle.SetResourceReference(TextBlock.ForegroundProperty,
+                            Entry.State == LocalComp.LocalCompFile.LocalFileStatus.Fine
+                                ? "ColorBrush2"
+                                : "ColorBrush5");
+                    }
+                    else
+                    {
+                        RectCheck.Height = 0d;
+                        RectCheck.Opacity = 0d;
+                        LabTitle.SetResourceReference(TextBlock.ForegroundProperty,
+                            Entry.State == LocalComp.LocalCompFile.LocalFileStatus.Fine
+                                ? "ColorBrush1"
+                                : "ColorBrushGray4");
+                    }
+
+                    Animations.AniStop("MyLocalCompItem Checked " + Uuid);
+                }
+            }
+            catch (Exception ex)
+            {
+                Common.Log(ex, "设置 Checked 失败");
+            }
+        }
+    }
+
+    #endregion
+
+    #region 后加载内容
+
+    // 右下角状态指示图标
+    private Image? _imgState;
+
+    // 指向背景
+    public Border RectBack
+    {
+        get
+        {
+            if (field is null)
+            {
+                var rect = new Border
+                {
+                    Name = "RectBack",
+                    CornerRadius = new CornerRadius(3d),
+                    RenderTransform = new ScaleTransform(0.8d, 0.8d),
+                    RenderTransformOrigin = new Point(0.5d, 0.5d),
+                    BorderThickness = new Thickness(Common.GetWpfSize(1d)),
+                    SnapsToDevicePixels = true,
+                    IsHitTestVisible = false,
+                    Opacity = 0d
+                };
+                rect.SetResourceReference(Border.BackgroundProperty, "ColorBrush7");
+                rect.SetResourceReference(Border.BorderBrushProperty, "ColorBrush6");
+                SetColumnSpan(rect, 999);
+                SetRowSpan(rect, 999);
+                Children.Insert(0, rect);
+                field = rect;
+                // <!--<corelocal:BlurBorder x:Name = "RectBack" CornerRadius="3" RenderTransformOrigin="0.5,0.5" SnapsToDevicePixels="True" 
+                // IsHitTestVisible = "False" Opacity="0" BorderThickness="1" 
+                // Grid.ColumnSpan = "4" Background="{DynamicResource ColorBrush7}" BorderBrush="{DynamicResource ColorBrush6}"/>-->
+            }
+
+            return field;
+        }
+    }
+
+    // 按钮
+    public Action<MyLocalCompItem, EventArgs>? buttonHandler;
+    public FrameworkElement? buttonStack;
+
+    public IEnumerable<MyIconButton> Buttons
+    {
+        get;
+        set
+        {
+            field = value;
+            // 移除原 Stack
+            if (buttonStack is not null)
+            {
+                Children.Remove(buttonStack);
+                buttonStack = null;
+            }
+
+            if (!value.Any())
+                return;
+            // 添加新 Stack
+            buttonStack = new StackPanel
+            {
+                Opacity = 0d,
+                Margin = new Thickness(0d, 0d, 5d, 0d),
+                SnapsToDevicePixels = false,
+                Orientation = (Orientation)System.Windows.Forms.Orientation.Horizontal,
+                HorizontalAlignment = HorizontalAlignment.Right,
+                VerticalAlignment = VerticalAlignment.Center,
+                UseLayoutRounding = false
+            };
+            SetColumnSpan(buttonStack, 10);
+            SetRowSpan(buttonStack, 10);
+            // 构造按钮
+            foreach (var btn in value)
+            {
+                if (btn.Height.Equals(double.NaN))
+                    btn.Height = 25d;
+                if (btn.Width.Equals(double.NaN))
+                    btn.Width = 25d;
+                ((StackPanel)buttonStack).Children.Add(btn);
+            }
+
+            Children.Add(buttonStack);
+        }
+    }
+
+    // 勾选条
+    public Border RectCheck
+    {
+        get
+        {
+            if (field is null)
+            {
+                field = new Border
+                {
+                    Width = 5d,
+                    Height = Checked ? double.NaN : 0d,
+                    CornerRadius = new CornerRadius(2d, 2d, 2d, 2d),
+                    VerticalAlignment = Checked ? VerticalAlignment.Stretch : VerticalAlignment.Center,
+                    HorizontalAlignment = HorizontalAlignment.Left,
+                    UseLayoutRounding = false,
+                    SnapsToDevicePixels = false,
+                    Margin = Checked ? new Thickness(-3, 6d, 0d, 6d) : new Thickness(-3, 0d, 0d, 0d)
+                };
+                field.SetResourceReference(Border.BackgroundProperty, "ColorBrush3");
+                SetRowSpan(field, 10);
+                Children.Add(field);
+            }
+
+            return field;
+        }
+    }
+
+    #endregion
+}

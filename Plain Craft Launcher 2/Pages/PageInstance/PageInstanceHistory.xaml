@@ -1,0 +1,40 @@
+﻿<local:MyPageRight x:Class="PCL.PageInstanceHistory"
+                   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                   xmlns:local="clr-namespace:PCL"
+                   xmlns:loc="https://ce.pclc.cc/core/localization"
+                   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                   mc:Ignorable="d"
+                   PanScroll="{Binding ElementName=PanBack}"
+                   d:DesignHeight="450" d:DesignWidth="800">
+    <local:MyScrollViewer x:Name="PanBack" VerticalScrollBarVisibility="Auto"
+                          HorizontalScrollBarVisibility="Disabled">
+        <StackPanel Margin="25,20,25,25">
+            <local:MyCard Title="{loc:Loc Instance.History.Title}">
+                <StackPanel Margin="15,40,25,16">
+                    <TextBlock Margin="0,4,0,12" TextWrapping="Wrap" Opacity="0.75"
+                               Text="{loc:Loc Instance.History.Description}" />
+                    <WrapPanel Orientation="Horizontal">
+                        <local:MyButton x:Name="BtnCapture" Click="BtnCapture_Click" MinWidth="130" Height="34"
+                                        Padding="13,0" ColorType="Highlight"
+                                        Text="{loc:Loc Instance.History.Create}" />
+                        <local:MyButton x:Name="BtnRefresh" Click="BtnRefresh_Click" Margin="10,0,0,0" MinWidth="100"
+                                        Height="34" Padding="13,0" Text="{loc:Loc Instance.History.Refresh}" />
+                        <local:MyButton x:Name="BtnOpenFolder" Click="BtnOpenFolder_Click" Margin="10,0,0,0"
+                                        MinWidth="110" Height="34" Padding="13,0"
+                                        Text="{loc:Loc Instance.History.OpenFolder}" />
+                    </WrapPanel>
+                </StackPanel>
+            </local:MyCard>
+
+            <local:MyCard Margin="0,15,0,0" Title="{loc:Loc Instance.History.ListTitle}">
+                <StackPanel Margin="15,40,25,16">
+                    <TextBlock x:Name="LabEmpty" Margin="0,4,0,8" TextWrapping="Wrap" Opacity="0.75"
+                               Text="{loc:Loc Instance.History.Empty}" Visibility="Collapsed" />
+                    <StackPanel x:Name="PanPoints" />
+                </StackPanel>
+            </local:MyCard>
+        </StackPanel>
+    </local:MyScrollViewer>
+</local:MyPageRight>

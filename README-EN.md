@@ -4,70 +4,74 @@
 
 <img src="Plain Craft Launcher 2/Images/icon.ico" alt="Logo" width="80" height="80">
 
-# PCL Community Edition
+# PCL SUPER
 
-[![Stars](https://img.shields.io/github/stars/PCL-Community/PCL-CE?style=for-the-badge&logo=data:image/svg%2bxml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZlcnNpb249IjEiIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiI+PHBhdGggZD0iTTggLjI1YS43NS43NSAwIDAgMSAuNjczLjQxOGwxLjg4MiAzLjgxNSA0LjIxLjYxMmEuNzUuNzUgMCAwIDEgLjQxNiAxLjI3OWwtMy4wNDYgMi45Ny43MTkgNC4xOTJhLjc1MS43NTEgMCAwIDEtMS4wODguNzkxTDggMTIuMzQ3bC0zLjc2NiAxLjk4YS43NS43NSAwIDAgMS0xLjA4OC0uNzlsLjcyLTQuMTk0TC44MTggNi4zNzRhLjc1Ljc1IDAgMCAxIC40MTYtMS4yOGw0LjIxLS42MTFMNy4zMjcuNjY4QS43NS43NSAwIDAgMSA4IC4yNVoiIGZpbGw9IiNlYWM1NGYiLz48L3N2Zz4=&logoSize=auto&label=stars&labelColor=444444&color=eac54f)](https://github.com/PCL-Community/PCL-CE/)
-![GitHub Release](https://img.shields.io/github/v/release/PCL-Community/PCL-CE?label=release&logo=github&style=for-the-badge)
-![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/PCL-Community/PCL-CE/build-test.yml?style=for-the-badge)
+A personal build based on [PCL-CE](https://github.com/PCL-Community/PCL-CE), with features ported from [PCL-Living-Fork](https://github.com/DDZmumo/PCL-Living-Fork).
 
-[![Issues](https://img.shields.io/github/issues/PCL-Community/PCL-CE?style=for-the-badge&label=issues&labelColor=444444&color=1F883D&logo=github)](https://github.com/PCL-Community/PCL-CE/issues)
-[![Pull requests](https://img.shields.io/github/issues-pr/PCL-Community/PCL-CE?style=for-the-badge&label=pull%20requests&labelColor=444444&color=1F883D&logo=github)](https://github.com/PCL-Community/PCL-CE/pulls)
-![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/PCL-Community/PCL-CE/total?style=for-the-badge)
-[![Bilibili](https://img.shields.io/badge/Threads-bilibili-00A4DB?style=for-the-badge&labelColor=444444&logo=bilibili)](https://space.bilibili.com/3546847192811755/dynamic) <br />
-
-<a href="https://trendshift.io/repositories/21800?utm_source=trendshift-badge&amp;utm_medium=badge&amp;utm_campaign=badge-trendshift-21800" target="_blank" rel="noopener noreferrer"><img src="https://trendshift.io/api/badge/trendshift/repositories/21800/daily?language=C%23" alt="PCL-Community%2FPCL-CE | Trendshift" width="250" height="55"/></a>
-<a href="https://trendshift.io/repositories/21800" target="_blank"><img src="https://trendshift.io/api/badge/repositories/21800" alt="PCL-Community%2FPCL-CE | Trendshift" style="width: 250px; height: 55px;" width="250" height="55"/></a>
-
-[download](https://github.com/PCL-Community/PCL-CE/releases/latest) |
-[Upstream repo](https://github.com/Meloong-Git/PCL)
-
-[Submit issues](https://github.com/PCL-Community/PCL-CE/issues/new/choose) |
-[Contribution Guidelines](https://github.com/PCL-Community/PCL-CE/wiki/开发指南)
+**Pre-release**: cross-compiled on Linux with 0 errors and 415 migration tests passing; not yet run on a real Windows machine.
 
 </div>
 
-PCL CE is a community edition developed as a secondary project based on PCL’s open-source code. It includes features and improvements that have not yet been implemented in the main branch.
+## What this is
 
-The version numbers of the community edition do not strictly correspond to those of the main branch, so please do not report community edition issues to the official repository.
+PCL SUPER is not a separate launcher. Everything that overlaps with CE (UI, downloader, instance pages, crash analysis) stays as CE. LF's behaviour is reimplemented on top of CE's types and resource model, so the two coexist instead of replacing each other.
 
-Everyone is welcome to try it out!
+Baseline: PCL-CE `dev@16207f9e`; port source: LF `main` + `migration/csharp-modern-dotnet`.
 
-**Developing group:** [599620549](https://qm.qq.com/q/PNQA4Md8wc) | **User group 1:** [1028074835](https://qm.qq.com/q/qrMGJo8BQQ) | **User group 2:** [1070029541](https://qm.qq.com/q/lBywbDMWhG)
+## Implemented
 
-## 💻 Supported Platforms
+- **Instance & environment**: restore points / snapshots, automatic snapshot before resource updates, instance clone and test-copy/migration
+- **Resources & dependencies**: dependency inspection and launch gate, dependency auto-fill with transaction rollback, dependency graph, keybinding editor
+- **Modpacks**: update from local `.zip` / `.mrpack`, direct link, or an author-supplied HTTPS manifest; diff preview, transactional commit, rollback, pre-update restore point; modpack mode
+- **Saves**: "continue last world" on the home page, map archive import with validation and duplicate-name suffixing
+- **CE adjustments**: removed region-based download restrictions, saves isolated from export by default
 
-| Operating System | Support Status | Requirements |
-|---|---|---|
-| Windows 10 1809 (17763) or later | ✅ Fully supported | [.NET 10 Desktop Runtime](http://get.dot.net/10) |
-| Windows 8 to Windows 10 1809 (17763) | ⚠️ Expected to run; community support offered at discretion | [.NET 10 Desktop Runtime](http://get.dot.net/10) |
-| Windows 7 or earlier | ❌ Not supported | N/A |
-| macOS / Linux / Other OS | ⚠️ Cross-platform development only (cross-compilation) | [.NET 10 SDK](http://get.dot.net/10) |
+## Not included
 
-**✅ Fully supported**: We will provide as much support as possible, but you must ensure you are using the latest version of the launcher.
+- Hash-based platform lookup, `ResourceSearcher/Project/Version`, and platform-side update discovery
+- All of these need platform APIs and credentials, currently deferred; no platform API is integrated
 
-**⚠️ Expected to run; community support offered at discretion**: PCL CE is expected to run on these platforms, but full functionality is not guaranteed. You may need to upgrade to a fully supported OS version to receive further community technical support.
+The author manifest accepts HTTPS static JSON only, with required `version` and `package` fields. See section 6 of [`docs/Living-Port-Matrix.md`](docs/Living-Port-Matrix.md).
 
-**❌ Not supported**: PCL CE may not be usable on these platforms and might not even launch at all. Please upgrade your OS to use PCL CE.
+## Acceptance status
 
-**⚠️ Cross-platform development only (cross-compilation)**: PCL CE’s source code can be built on macOS and Linux, but it cannot run directly. As a developer, you can develop on these platforms and then move the build artifacts to Windows for testing.
+All UI changes have only been cross-compiled on Linux and **have not been run on Windows**.
+The item-by-item checklist is in [`docs/Windows-Acceptance.md`](docs/Windows-Acceptance.md).
 
-**Note**:     
-The community only supports the latest version of the launcher.    
-Depending on the nature of certain issues (e.g., an incomplete system environment), you may still need to upgrade your OS to continue receiving support.    
-PCL CE always recommends using the latest version of your OS for the best experience.    
-You can still try using the latest launcher version on unsupported platforms, but you may encounter many additional problems.
+## Build
 
-## 🔒 License
+Requires the .NET 10 SDK.
 
-- `Plain Craft Launcher 2/` uses [Custom License](https://github.com/PCL-Community/PCL-CE/blob/dev/Plain%20Craft%20Launcher%202/LICENCE)
-- `All other directories` use [Apache License 2.0](https://github.com/PCL-Community/PCL-CE/blob/dev/LICENSE)
+```bash
+dotnet build "Plain Craft Launcher 2.slnx" -c Release
+dotnet PCL.Living.Features.Tests/bin/Release/net10.0/PCL.Living.Features.Tests.dll
+```
 
-## 🌟 Statistic
-![Alt](https://repobeats.axiom.co/api/embed/3e46296e6e3a134991a783480fd2f62723bb0353.svg "Repobeats analytics image")
+Windows x64 framework-dependent publish:
 
-[![Star History Chart](https://api.star-history.com/svg?repos=PCL-Community/PCL-CE&type=Date)](https://www.star-history.com/#PCL-Community/PCL-CE&Date)
+```bash
+dotnet publish "Plain Craft Launcher 2/Plain Craft Launcher 2.csproj" -c Release -r win-x64 --self-contained false -o publish
+```
 
-**Views** (Total / Today): [![Hits](https://hits.zkitefly.eu.org/?tag=https://github.com/PCL-Community/PCL-CE)](https://hits.zkitefly.eu.org/?tag=https://github.com/PCL-Community/PCL-CE&web=true)
-## ❤️ Contributors
+Running requires the .NET 10 Desktop Runtime (x64).
 
-[![](https://contrib.rocks/image?repo=PCL-Community/PCL-CE)](https://github.com/PCL-Community/PCL-CE/graphs/contributors)
+## Layout
+
+| Directory | Contents |
+|---|---|
+| `PCL.Core` / `PCL.Core.Wpf` | CE core and WPF foundation |
+| `PCL.Launcher.Core` | Launch, instances, dependency auto-fill |
+| `PCL.Living.Features` | Engines ported from LF (net10.0, no WPF) |
+| `PCL.Living.Features.Tests` | 415 migration tests |
+| `Plain Craft Launcher 2` | Application and UI |
+| `docs` | Port matrix, acceptance checklist |
+
+## License and provenance
+
+- `Plain Craft Launcher 2/`: PCL Limited Distribution License, see [`Plain Craft Launcher 2/LICENCE`](Plain%20Craft%20Launcher%202/LICENCE).
+  It only permits storing and redistributing unmodified copies; this build modifies that directory, so it **must not be distributed publicly**
+- Other directories: Apache-2.0, see [`LICENSE`](LICENSE)
+- Ported LF code and attribution: see [`NOTICE-LIVING.md`](NOTICE-LIVING.md)
+- Upstream: [PCL](https://github.com/Meloong-Git/PCL) | [PCL-CE](https://github.com/PCL-Community/PCL-CE) | [PCL-Living-Fork](https://github.com/DDZmumo/PCL-Living-Fork)
+
+This is a personal derivative and does not represent upstream. Do not report issues with this build to upstream repositories. This repository is a private preview and is not cleared for public distribution.

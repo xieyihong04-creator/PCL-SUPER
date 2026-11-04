@@ -4,70 +4,99 @@
 
 <img src="Plain Craft Launcher 2/Images/icon.ico" alt="Logo" width="80" height="80">
 
-# PCL Community Edition
+# PCL SUPER
 
-[![Stars](https://img.shields.io/github/stars/PCL-Community/PCL-CE?style=for-the-badge&logo=data:image/svg%2bxml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZlcnNpb249IjEiIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiI+PHBhdGggZD0iTTggLjI1YS43NS43NSAwIDAgMSAuNjczLjQxOGwxLjg4MiAzLjgxNSA0LjIxLjYxMmEuNzUuNzUgMCAwIDEgLjQxNiAxLjI3OWwtMy4wNDYgMi45Ny43MTkgNC4xOTJhLjc1MS43NTEgMCAwIDEtMS4wODguNzkxTDggMTIuMzQ3bC0zLjc2NiAxLjk4YS43NS43NSAwIDAgMS0xLjA4OC0uNzlsLjcyLTQuMTk0TC44MTggNi4zNzRhLjc1Ljc1IDAgMCAxIC40MTYtMS4yOGw0LjIxLS42MTFMNy4zMjcuNjY4QS43NS43NSAwIDAgMSA4IC4yNVoiIGZpbGw9IiNlYWM1NGYiLz48L3N2Zz4=&logoSize=auto&label=stars&labelColor=444444&color=eac54f)](https://github.com/PCL-Community/PCL-CE/)
-![GitHub Release](https://img.shields.io/github/v/release/PCL-Community/PCL-CE?label=release&logo=github&style=for-the-badge)
-![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/PCL-Community/PCL-CE/build-test.yml?style=for-the-badge)
+以 [PCL-CE](https://github.com/PCL-Community/PCL-CE) 为基底，移植 [PCL-Living-Fork](https://github.com/DDZmumo/PCL-Living-Fork) 功能的个人构建。
 
-[![Issues](https://img.shields.io/github/issues/PCL-Community/PCL-CE?style=for-the-badge&label=issues&labelColor=444444&color=1F883D&logo=github)](https://github.com/PCL-Community/PCL-CE/issues)
-[![Pull requests](https://img.shields.io/github/issues-pr/PCL-Community/PCL-CE?style=for-the-badge&label=pull%20requests&labelColor=444444&color=1F883D&logo=github)](https://github.com/PCL-Community/PCL-CE/pulls)
-![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/PCL-Community/PCL-CE/total?style=for-the-badge)
-[![哔哩哔哩](https://img.shields.io/badge/动态-bilibili-00A4DB?style=for-the-badge&labelColor=444444&logo=bilibili)](https://space.bilibili.com/3546847192811755/dynamic) <br />
-
-<a href="https://trendshift.io/repositories/21800?utm_source=trendshift-badge&amp;utm_medium=badge&amp;utm_campaign=badge-trendshift-21800" target="_blank" rel="noopener noreferrer"><img src="https://trendshift.io/api/badge/trendshift/repositories/21800/weekly?language=C%23" alt="PCL-Community%2FPCL-CE | Trendshift" width="250" height="55"/></a>
-<a href="https://trendshift.io/repositories/21800" target="_blank" rel="noopener noreferrer"><img src="https://trendshift.io/api/badge/repositories/21800" alt="PCL-Community%2FPCL-CE | Trendshift" style="width: 250px; height: 55px;" width="250" height="55"/></a>
-
-[社区版下载](https://github.com/PCL-Community/PCL-CE/releases/latest) |
-[上游存储库](https://github.com/Meloong-Git/PCL)
-
-[提交问题](https://github.com/PCL-Community/PCL-CE/issues/new/choose) |
-[贡献指南](https://github.com/PCL-Community/PCL-CE/wiki/开发指南)
+**预发布**：Linux 交叉编译 0 error，415 项迁移测试通过；尚未在 Windows 实机运行验收。
 
 </div>
 
-PCL CE 是基于 PCL 开源代码二次开发的社区版本，包括了主线暂未制作的功能和改进！
+## 这是什么
 
-社区版的版本号与主线并非严格对应关系，也请不要向官方仓库反馈社区版问题。
+PCL SUPER 不是另起一套启动器。界面、下载器、实例页、崩溃分析等与 CE 重叠的部分全部保留 CE 实现；
+LF 的能力按行为重写到 CE 的类型与资源模型上，两边并存而不是相互替换。
 
-欢迎大家来用用看！
+基线：PCL-CE `dev@16207f9e`；移植源：LF `main` + `migration/csharp-modern-dotnet`。
 
-**开发群:** [599620549](https://qm.qq.com/q/PNQA4Md8wc)[✦](https://t.me/+78XW2bUOvKJjMTZl) | **用户 1 群:** [1028074835](https://qm.qq.com/q/qrMGJo8BQQ) | **用户 2 群:** [1070029541](https://qm.qq.com/q/lBywbDMWhG)
+## 已实现
 
-## 💻 支持平台
+**实例与环境**
 
-| 操作系统 | 支持情况 | 环境要求 |
-|---|---|---|
-| Windows 10 1809 (17763) 或更高 | ✅ 完整支持 | [.NET 10 Desktop Runtime](https://get.dot.net/10) |
-| Windows 8 - Windows 10 1809 (17763) | ⚠️ 理论能跑，酌情提供社区支持 | [.NET 10 Desktop Runtime](https://get.dot.net/10) |
-| Windows 7 或更低版本 | ❌ 不支持 | / |
-| macOS / Linux / 其他操作系统 | ⚠️ 仅跨平台开发支持（交叉编译） | [.NET 10 SDK](https://get.dot.net/10) |
+- 还原点 / 环境快照：创建、恢复、删除，中断日志回滚
+- 资源更新前自动留档（替换任何 Mod / 资源包 / 光影前）
+- 实例克隆与“创建测试副本 / 迁移测试环境”
 
-**✅ 完整支持**：尽可能提供一切相关支持，但必须确保启动器为最新版本。
+**资源与依赖**
 
-**⚠️ 理论能跑，酌情提供社区支持**：PCL CE 应该可以在这些平台上运行，但不保证功能完全可用。你可能需要升级到完整支持的系统版本以获得进一步社区技术支持。
+- 依赖检查、启动前依赖判定、依赖补全（含事务回滚）
+- 依赖关系图：必需依赖分列、未满足项标红
+- 按键设置：读取 options.txt、补全模组名称、重复占用分组
 
-**❌ 不支持**：PCL CE 在这些平台的可用性较低，甚至压根打不开。请升级操作系统以使用 PCL CE。
+**整合包**
 
-**⚠️ 仅跨平台开发支持（交叉编译）**：PCL CE 的源代码可以在 macOS 与 Linux 平台编译，但无法直接运行。作为开发者，你可以在这些平台上进行开发，然后将编译产物转移到 Windows 系统测试。
+- 更新：本地 `.zip` / `.mrpack`、下载直链、作者 HTTPS 清单检查
+- 差异预览后事务提交，个人修改默认保留，失败自动回滚，更新前自动保存还原点
+- 整合包模式：资源页收敛为查看与搜索，资源变动走整合包更新
+- Minecraft 或加载器版本变化时拒绝原地更新
 
-**注**：    
-社区仅对最新版本的启动器提供支持。    
-取决于部分问题的特殊性（如系统不完整），有时你仍然必须升级操作系统以继续获得支持。    
-PCL CE 始终建议使用最新版本的操作系统以获得最佳体验。    
-你仍然可以尝试在不受支持的系统上使用 PCL CE，但可能会遇到很多额外问题。
+**存档**
 
-## 🔒 许可证
+- 首页“继续上次的世界”
+- 存档压缩包导入：多选、单世界校验、越界与链接拒绝、重名顺延
 
-- `Plain Craft Launcher 2/` 使用 [自定义许可证](https://github.com/PCL-Community/PCL-CE/blob/dev/Plain%20Craft%20Launcher%202/LICENCE)
-- `其余所有目录` 使用 [Apache License 2.0](https://github.com/PCL-Community/PCL-CE/blob/dev/LICENSE)
+**CE 侧调整**
 
-## 🌟 统计数据
-![Alt](https://repobeats.axiom.co/api/embed/3e46296e6e3a134991a783480fd2f62723bb0353.svg "Repobeats analytics image")
+- 移除地区下载限制
+- 导出默认隔离存档（不打包 `saves/`）
 
-[![Star History Chart](https://api.star-history.com/chart?repos=PCL-Community/PCL-CE&type=date&legend=top-left&sealed_token=Ts-GaAXJ5nb9fJERusrXneo05pfZ83tMhReHJ98nmmlemBTqHS5Ozocdep1MTMdsX-6CRiQH9TqiS1Kk7SxjTfk02eUOxnm25oHff6TLLvrY7pGujOkU1IwjVFQLE-5GJYogutJAyI78jujBlOnpk3J2OKAY1PBhmkyUOzW1C1sdz5BzPbj2eBbJGvDx)](https://www.star-history.com/?repos=PCL-Community%2FPCL-CE&type=date&legend=top-left)
+## 当前不做
 
-**此页浏览量**（总计 / 今日）：[![Hits](https://hits.zkitefly.eu.org/?tag=https://github.com/PCL-Community/PCL-CE)](https://hits.zkitefly.eu.org/?tag=https://github.com/PCL-Community/PCL-CE&web=true)
-## ❤️ 贡献者
+- 按哈希批量反查平台项目、`ResourceSearcher/Project/Version` 在线搜索、平台自动发现新版本
+- 以上都需要平台 API 与凭据，当前口径为全部暂缓，不接任何平台接口
 
-[![](https://contrib.rocks/image?repo=PCL-Community/PCL-CE)](https://github.com/PCL-Community/PCL-CE/graphs/contributors)
+作者清单只接受 HTTPS 静态 JSON，必填 `version` 与 `package`，格式见
+[`docs/Living-Port-Matrix.md`](docs/Living-Port-Matrix.md) 第六节。
+
+## 验收状态
+
+所有界面改动目前只经过 Linux 交叉编译，**未在 Windows 实机运行**。
+逐项验收清单见 [`docs/Windows-Acceptance.md`](docs/Windows-Acceptance.md)。
+
+## 构建
+
+需要 .NET 10 SDK。Linux 下可交叉编译：
+
+```bash
+dotnet build "Plain Craft Launcher 2.slnx" -c Release
+dotnet PCL.Living.Features.Tests/bin/Release/net10.0/PCL.Living.Features.Tests.dll
+```
+
+Windows x64 框架依赖发布：
+
+```bash
+dotnet publish "Plain Craft Launcher 2/Plain Craft Launcher 2.csproj" -c Release -r win-x64 --self-contained false -o publish
+```
+
+运行需要 .NET 10 Desktop Runtime（x64）。
+
+## 目录
+
+| 目录 | 内容 |
+|---|---|
+| `PCL.Core` / `PCL.Core.Wpf` | CE 核心与 WPF 基础层 |
+| `PCL.Launcher.Core` | 启动、实例、依赖补全等业务层 |
+| `PCL.Living.Features` | 从 LF 移植的引擎（net10.0，无 WPF 依赖） |
+| `PCL.Living.Features.Tests` | 迁移测试，415 项 |
+| `Plain Craft Launcher 2` | 应用与界面 |
+| `docs` | 移植矩阵、验收清单 |
+
+## 许可与来源
+
+- `Plain Craft Launcher 2/`：PCL《分发有限许可》，见 [`Plain Craft Launcher 2/LICENCE`](Plain%20Craft%20Launcher%202/LICENCE)。
+  该许可只授予“原样副本”的存储与再分发权；本构建修改了该目录，因此**不应公开分发**
+- 其余目录：Apache-2.0，见 [`LICENSE`](LICENSE)
+- LF 移植部分的署名、来源与许可说明：见 [`NOTICE-LIVING.md`](NOTICE-LIVING.md)
+- 上游：[PCL](https://github.com/Meloong-Git/PCL) ｜ [PCL-CE](https://github.com/PCL-Community/PCL-CE) ｜ [PCL-Living-Fork](https://github.com/DDZmumo/PCL-Living-Fork)
+
+本项目为个人二次开发，不代表上游立场，请勿向上游仓库反馈本构建的问题。当前仓库为私有预览，未获准公开分发。

@@ -42,7 +42,7 @@ public partial class PageInstanceModGraph : IPageView
         if (instance is null) return;
         _loadToken?.Cancel();
         var token = _loadToken = new CancellationTokenSource();
-        LabSummary.Text = Lang.Text("Instance.Keybinding.Loading");
+        LabSummary.Text = Lang.Text("Instance.ModGraph.Loading");
         PanGraph.Children.Clear();
 
         Task.Run(() =>

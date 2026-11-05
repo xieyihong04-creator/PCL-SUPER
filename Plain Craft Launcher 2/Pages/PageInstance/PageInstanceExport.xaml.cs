@@ -429,15 +429,15 @@ public partial class PageInstanceExport : IRefreshable, IPageView
         // 逐个检查选项
         foreach (var checkBox in GetAllOptions(true))
         {
-            // 隔离存档开关由配置单独维护，不参与默认勾选重置
-            if (checkBox == CheckIsolateSaves)
-                continue;
             var targetOption = GetExportOption(checkBox);
             // 名称与简介
             checkBox.Inlines.Clear();
             checkBox.Inlines.Add(new Run(targetOption.Title));
             if (!string.IsNullOrEmpty(targetOption.Description))
                 checkBox.Inlines.Add(new Run("   " + targetOption.Description) { Foreground = ThemeManager.colorGray5 });
+            // 隔离存档开关由配置单独维护，不参与默认勾选重置
+            if (checkBox == CheckIsolateSaves)
+                continue;
             // 可见性、默认勾选
             if (string.IsNullOrEmpty(targetOption.Rules) && string.IsNullOrEmpty(targetOption.ShowRules))
             {

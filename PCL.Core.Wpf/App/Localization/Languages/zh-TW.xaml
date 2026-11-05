@@ -935,6 +935,7 @@
     <sys:String x:Key="Instance.ModGraph.CanvasTitle">關係圖</sys:String>
     <sys:String x:Key="Instance.ModGraph.Error">讀取依賴關係失敗，請查看日誌。</sys:String>
     <sys:String x:Key="Instance.ModGraph.Empty">沒有可顯示的依賴關係。</sys:String>
+    <sys:String x:Key="Instance.ModGraph.Loading">正在讀取模組依賴…</sys:String>
     <sys:String x:Key="Instance.ModGraph.Truncated">僅顯示前 {0} 個模組。</sys:String>
     <sys:String x:Key="Instance.ModGraph.Disabled">已停用</sys:String>
     <sys:String x:Key="Instance.ModGraph.Detail.Id">Mod ID：{0}</sys:String>

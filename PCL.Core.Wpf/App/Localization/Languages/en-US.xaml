@@ -974,6 +974,7 @@
     <sys:String x:Key="Instance.ModGraph.CanvasTitle">Graph</sys:String>
     <sys:String x:Key="Instance.ModGraph.Error">Failed to read dependencies. Check the log for details.</sys:String>
     <sys:String x:Key="Instance.ModGraph.Empty">No dependency relationships to show.</sys:String>
+    <sys:String x:Key="Instance.ModGraph.Loading">Reading mod dependencies…</sys:String>
     <sys:String x:Key="Instance.ModGraph.Truncated">Showing the first {0} mods only.</sys:String>
     <sys:String x:Key="Instance.ModGraph.Disabled">disabled</sys:String>
     <sys:String x:Key="Instance.ModGraph.Detail.Id">Mod ID: {0}</sys:String>

@@ -3,6 +3,7 @@ using System.IO;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
 using PCL.Core.App;
@@ -106,7 +107,7 @@ public partial class PageLaunchRight : IRefreshable
         PanContinueWorld.Visibility = Visibility.Visible;
     }
 
-    private void BtnContinueWorld_Click(object sender, EventArgs e)
+    private void BtnContinueWorld_Click(object sender, MouseButtonEventArgs e)
     {
         var instance = _continueWorldInstance;
         var save = _continueWorldSave;

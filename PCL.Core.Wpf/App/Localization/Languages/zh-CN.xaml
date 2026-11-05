@@ -974,6 +974,7 @@
     <sys:String x:Key="Instance.ModGraph.CanvasTitle">关系图</sys:String>
     <sys:String x:Key="Instance.ModGraph.Error">读取依赖关系失败，请查看日志。</sys:String>
     <sys:String x:Key="Instance.ModGraph.Empty">没有可显示的依赖关系。</sys:String>
+    <sys:String x:Key="Instance.ModGraph.Loading">正在读取模组依赖…</sys:String>
     <sys:String x:Key="Instance.ModGraph.Truncated">仅显示前 {0} 个模组。</sys:String>
     <sys:String x:Key="Instance.ModGraph.Disabled">已禁用</sys:String>
     <sys:String x:Key="Instance.ModGraph.Detail.Id">Mod ID：{0}</sys:String>

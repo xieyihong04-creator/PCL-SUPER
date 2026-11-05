@@ -259,7 +259,9 @@ public static partial class LocalComp
 
     private static bool ShouldSkipResourceFile(FileInfo file, string rawName)
     {
-        if ((file.DirectoryName ?? "").Equals(rawName, StringComparison.CurrentCultureIgnoreCase))
+        var fileFolder = (file.DirectoryName ?? "").TrimEnd('\\', '/');
+        var targetFolder = rawName.TrimEnd('\\', '/');
+        if (fileFolder.Equals(targetFolder, StringComparison.CurrentCultureIgnoreCase))
             return false;
 
         return !(LauncherState.SelectedInstance is not null

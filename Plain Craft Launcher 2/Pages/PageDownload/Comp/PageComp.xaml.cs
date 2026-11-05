@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.IO;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Markup;
@@ -218,31 +219,14 @@ public partial class PageComp
         // 不知道从 Initialized 改成 Loaded 会不会有问题，但用 Initialized 会导致初始的筛选器修改被覆盖回默认值
         if (targetVersion is not null)
         {
-            // 设置目标
-            ResetFilter(); // 重置筛选器
-            TextSearchVersion.Text = targetVersion.Info.VanillaName;
-
-            MyComboBoxItem GetTargetItemByName(string name)
-            {
-                foreach (MyComboBoxItem Item in ComboSearchLoader.Items)
-                    if (string.Equals(Item.Content?.ToString(), name, StringComparison.OrdinalIgnoreCase))
-                        return Item;
-                return (MyComboBoxItem)ComboSearchLoader.Items[0];
-            }
-
-            ;
-            if (targetVersion.Info.HasForge)
-                ComboSearchLoader.SelectedItem = GetTargetItemByName("Forge");
-            else if (targetVersion.Info.HasFabric)
-                ComboSearchLoader.SelectedItem = GetTargetItemByName("Fabric");
-            else if (targetVersion.Info.HasNeoForge)
-                ComboSearchLoader.SelectedItem = GetTargetItemByName("NeoForge");
-            else if (targetVersion.Info.HasQuilt) ComboSearchLoader.SelectedItem = GetTargetItemByName("Quilt");
+            _presetInstancePath = targetVersion.PathInstance;
+            ApplyTargetInstance(targetVersion, true);
             targetVersion = null;
-            // 如果已经完成请求，则重新开始
-            if (isLoaderInited)
-                StartNewSearch();
-            ScrollToHome();
+        }
+        else
+        {
+            // 未指定目标时跟随当前选择的实例
+            ApplyInstancePreset(null, true);
         }
 
         // 加载器初始化
@@ -278,6 +262,86 @@ public partial class PageComp
             _vm.IsLoaderLabelVisible = false;
             _vm.IsLoaderComboVisible = false;
             _vm.IsShaderLoaderComboVisible = false;
+        }
+    }
+
+    private string? _presetInstancePath;
+
+    /// <summary>
+    ///     按当前选择的实例预设版本与加载器筛选。同一实例重复进入时保留用户手动修改的筛选。
+    /// </summary>
+    public void ApplyInstancePreset(McInstance? instance = null, bool restart = false)
+    {
+        instance ??= InstanceList.McMcInstanceSelected;
+        if (instance is null)
+            return;
+        if (!instance.IsLoaded)
+            instance.Load();
+        if (instance.state == McInstanceState.Error)
+            return;
+        if (string.Equals(_presetInstancePath, instance.PathInstance, StringComparison.OrdinalIgnoreCase))
+            return;
+        _presetInstancePath = instance.PathInstance;
+        ApplyTargetInstance(instance, restart);
+    }
+
+    private void ApplyTargetInstance(McInstance target, bool restart)
+    {
+        ResetFilter();
+        TextSearchVersion.Text = target.Info.VanillaName;
+
+        MyComboBoxItem GetTargetItemByName(string name)
+        {
+            foreach (MyComboBoxItem item in ComboSearchLoader.Items)
+                if (string.Equals(item.Content?.ToString(), name, StringComparison.OrdinalIgnoreCase))
+                    return item;
+            return (MyComboBoxItem)ComboSearchLoader.Items[0];
+        }
+
+        MyComboBoxItem GetShaderItemByTag(string tag)
+        {
+            foreach (MyComboBoxItem item in ComboSearchShaderLoader.Items)
+                if (string.Equals((item as FrameworkElement)?.Tag?.ToString(), tag,
+                        StringComparison.OrdinalIgnoreCase))
+                    return item;
+            return (MyComboBoxItem)ComboSearchShaderLoader.Items[0];
+        }
+
+        if (PageType is Comp.CompType.Mod or Comp.CompType.ModPack)
+        {
+            if (target.Info.HasForge)
+                ComboSearchLoader.SelectedItem = GetTargetItemByName("Forge");
+            else if (target.Info.HasFabric)
+                ComboSearchLoader.SelectedItem = GetTargetItemByName("Fabric");
+            else if (target.Info.HasNeoForge)
+                ComboSearchLoader.SelectedItem = GetTargetItemByName("NeoForge");
+            else if (target.Info.HasQuilt)
+                ComboSearchLoader.SelectedItem = GetTargetItemByName("Quilt");
+        }
+        else if (PageType == Comp.CompType.Shader)
+        {
+            if (target.Info.HasOptiFine)
+                ComboSearchShaderLoader.SelectedItem = GetShaderItemByTag("/optifine");
+            else if (HasIrisMod(target))
+                ComboSearchShaderLoader.SelectedItem = GetShaderItemByTag("/iris");
+        }
+
+        if (restart && isLoaderInited)
+            StartNewSearch();
+        ScrollToHome();
+    }
+
+    private static bool HasIrisMod(McInstance instance)
+    {
+        try
+        {
+            var mods = Path.Combine(instance.PathIndie, "mods");
+            return Directory.Exists(mods)
+                   && Directory.EnumerateFiles(mods, "iris*.jar", SearchOption.TopDirectoryOnly).Any();
+        }
+        catch
+        {
+            return false;
         }
     }
 

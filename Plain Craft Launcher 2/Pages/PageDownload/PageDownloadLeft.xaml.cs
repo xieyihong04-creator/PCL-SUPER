@@ -47,6 +47,7 @@ public partial class PageDownloadLeft : IRefreshable
                 {
                     Launcher.frmDownloadMod.Content.storage = new Comp.CompProjectStorage();
                     Launcher.frmDownloadMod.Content.page = 0;
+                    Launcher.frmDownloadMod.Content.ApplyInstancePreset();
                     Launcher.frmDownloadMod.PageLoaderRestart();
                 }
 
@@ -61,6 +62,7 @@ public partial class PageDownloadLeft : IRefreshable
                 {
                     Launcher.frmDownloadPack.Content.storage = new Comp.CompProjectStorage();
                     Launcher.frmDownloadPack.Content.page = 0;
+                    Launcher.frmDownloadPack.Content.ApplyInstancePreset();
                     Launcher.frmDownloadPack.PageLoaderRestart();
                 }
 
@@ -75,6 +77,7 @@ public partial class PageDownloadLeft : IRefreshable
                 {
                     Launcher.frmDownloadDataPack.Content.storage = new Comp.CompProjectStorage();
                     Launcher.frmDownloadDataPack.Content.page = 0;
+                    Launcher.frmDownloadDataPack.Content.ApplyInstancePreset();
                     Launcher.frmDownloadDataPack.PageLoaderRestart();
                 }
 
@@ -90,6 +93,7 @@ public partial class PageDownloadLeft : IRefreshable
                     Launcher.frmDownloadResourcePack.Content.storage =
                         new Comp.CompProjectStorage();
                     Launcher.frmDownloadResourcePack.Content.page = 0;
+                    Launcher.frmDownloadResourcePack.Content.ApplyInstancePreset();
                     Launcher.frmDownloadResourcePack.PageLoaderRestart();
                 }
 
@@ -104,6 +108,7 @@ public partial class PageDownloadLeft : IRefreshable
                 {
                     Launcher.frmDownloadShader.Content.storage = new Comp.CompProjectStorage();
                     Launcher.frmDownloadShader.Content.page = 0;
+                    Launcher.frmDownloadShader.Content.ApplyInstancePreset();
                     Launcher.frmDownloadShader.PageLoaderRestart();
                 }
 
@@ -118,6 +123,7 @@ public partial class PageDownloadLeft : IRefreshable
                 {
                     Launcher.frmDownloadWorld.Content.storage = new Comp.CompProjectStorage();
                     Launcher.frmDownloadWorld.Content.page = 0;
+                    Launcher.frmDownloadWorld.Content.ApplyInstancePreset();
                     Launcher.frmDownloadWorld.PageLoaderRestart();
                 }
 

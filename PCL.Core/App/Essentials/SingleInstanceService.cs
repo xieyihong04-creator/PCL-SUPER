@@ -14,7 +14,7 @@ namespace PCL.Core.App.Essentials;
 public sealed partial class SingleInstanceService
 {
     private static FileStream? _lockStream;
-    private static readonly string _LockFilePath = Path.Combine(Paths.SharedLocalData, "instance.lock");
+    private static readonly string _LockFilePath = Path.Combine(Paths.SharedLocalData, "instance.pclsuper.lock");
 
     private static void _TryRpc(string processId, string content)
     {

@@ -135,28 +135,11 @@ public partial class PageLaunchRight : IRefreshable
 
     #endregion
 
-    // 暂时关闭快照版提示
+    // 永久关闭提示
     private void BtnHintClose_Click(object sender, EventArgs e)
     {
-        var input = (DialogService.Instance.Show(new InputDialogRequest
-        {
-            Title = Lang.Text("Launch.Right.CommunityHint.InputTitle"),
-            Buttons = DialogButtons.OkCancel,
-            HighLight = false,
-            ForceWait = true
-        }).Result?.InputText ?? "");
-        if (string.IsNullOrWhiteSpace(input))
-            return;
-        input = new string(input.Where(char.IsAsciiLetter).ToArray()).ToLower();
-        if (input.Contains("pclcommunity"))
-        {
-            Animations.AniDispose(PanHint, true);
-            States.Hint.CEMessage = false;
-        }
-        else
-        {
-            HintService.Show(Hints.Info(Lang.Text("Launch.Right.CommunityHint.WrongInput")));
-        }
+        Animations.AniDispose(PanHint, true);
+        States.Hint.CEMessage = false;
     }
 
     #region 主页

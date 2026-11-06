@@ -14,17 +14,7 @@ public static class UpdateManager
     public static UpdatesWrapperModel remoteServer = new(
         new List<IUpdateSource>
         {
-            new UpdatesMirrorChyanModel(),
-            new UpdatesRandomModel(
-            [
-                new UpdatesMinioModel("https://s3.pysio.online/pcl2-ce/", "Pysio"),
-                new UpdatesMinioModel(
-                    "https://staticassets.naids.com/resources/pclce/",
-                    "Naids")
-            ]),
-            new UpdatesMinioModel(
-                "https://github.com/PCL-Community/PCL2_CE_Server/raw/main/",
-                "GitHub")
+            new UpdatesGitHubModel()
         });
 
     public static Loading.LoaderCombo<JsonObject> updateLoader;
@@ -92,13 +82,21 @@ public static class UpdateManager
         }
     }
 
+    /// <summary>启动器不在前台或游戏运行时暂缓提示，回到前台后再执行。</summary>
+    private static void _RunWhenUserPresent(Action action)
+    {
+        if (UpdateUi.Current is null)
+            return;
+        UpdateUi.Current.RunWhenUserPresent(action);
+    }
+
     public static void UpdateStart(
         UpdateEnums.UpdateType type,
         string? receivedKey = null,
         bool forceValidated = false)
     {
         var dlTargetPath =
-            $@"{LauncherPaths.ExecutableDirectory}PCL\Plain Craft Launcher Community Edition.exe";
+            $@"{LauncherPaths.ExecutableDirectory}PCL\PCL-SUPER-update.exe";
         LauncherCommon.RunInNewThread(() =>
         {
             try
@@ -116,7 +114,7 @@ public static class UpdateManager
                     return;
                 if (type == UpdateEnums.UpdateType.PromptOnly)
                 {
-                    LauncherCommon.RunInUi(() =>
+                    _RunWhenUserPresent(() =>
                     {
                         if ((UpdateUi.Current?.ShowMessageBox(
                                     Lang.Text(
@@ -177,11 +175,12 @@ public static class UpdateManager
                                 _ =>
                                 {
                                     isUpdateWaitingRestart = true;
-                                    UpdateUi.Current?.ShowUpdateRestartButton(
-                                        Lang.Text(
-                                            "Main.Extra.UpdateRestart.ToolTipWithVersion",
-                                            LauncherCommon.VersionBaseName,
-                                            version.VersionName));
+                                    _RunWhenUserPresent(
+                                        () => UpdateUi.Current?.ShowUpdateRestartButton(
+                                            Lang.Text(
+                                                "Main.Extra.UpdateRestart.ToolTipWithVersion",
+                                                LauncherCommon.VersionBaseName,
+                                                version.VersionName)));
                                 })
                             {
                                 show = false
@@ -221,9 +220,10 @@ public static class UpdateManager
             {
                 LauncherCommon.Log(ex, "[Update] 获取启动器更新失败");
                 if (type != UpdateEnums.UpdateType.Silent)
-                    UpdateUi.Current?.ShowHint(
-                        Lang.Text("Update.Error.FetchFailed"),
-                        NotificationType.Error);
+                    _RunWhenUserPresent(
+                        () => UpdateUi.Current?.ShowHint(
+                            Lang.Text("Update.Error.FetchFailed"),
+                            NotificationType.Error));
             }
         });
     }
@@ -233,7 +233,7 @@ public static class UpdateManager
         try
         {
             var fileName = LauncherPaths.ExecutableDirectory
-                + @"PCL\Plain Craft Launcher Community Edition.exe";
+                + @"PCL\PCL-SUPER-update.exe";
             if (!File.Exists(fileName))
             {
                 LauncherCommon.Log("[System] 更新失败：未找到更新文件");

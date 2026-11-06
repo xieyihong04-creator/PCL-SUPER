@@ -3,6 +3,12 @@ namespace PCL;
 /// <summary>更新业务向 UI 层发出的通知。</summary>
 public interface IUpdateUi
 {
+    /// <summary>启动器是否为前台活动窗口且没有处于游戏启动/运行中。</summary>
+    bool IsUserPresent { get; }
+
+    /// <summary>用户不在场时暂缓执行，回到前台后再执行一次。</summary>
+    void RunWhenUserPresent(Action action);
+
     int ShowMessageBox(
         string caption,
         string? title = null,

@@ -1,10 +1,110 @@
+using System.Windows;
+using System.Windows.Threading;
 using PCL.Core.Platform;
+using PCL.Living.Features;
 
 namespace PCL;
 
 /// <summary>将更新业务通知桥接到 WPF 主窗口。</summary>
 public sealed class WpfUpdateUi : IUpdateUi
 {
+    private static readonly List<Action> Pending = [];
+    private static readonly object PendingSync = new();
+    private static DispatcherTimer? _pendingTimer;
+
+    private static bool HasRunningGame => GameLaunch.mcLaunchProcess is { HasExited: false };
+
+    public bool IsUserPresent => IsUserPresentNow();
+
+    public void RunWhenUserPresent(Action action)
+    {
+        ArgumentNullException.ThrowIfNull(action);
+        var dispatcher = Application.Current?.Dispatcher;
+        if (dispatcher is null)
+        {
+            action();
+            return;
+        }
+
+        if (!dispatcher.CheckAccess())
+        {
+            dispatcher.BeginInvoke(() => RunWhenUserPresent(action));
+            return;
+        }
+
+        if (IsUserPresentNow())
+        {
+            action();
+            return;
+        }
+
+        lock (PendingSync)
+            Pending.Add(action);
+        EnsurePendingTimer(dispatcher);
+        Common.Log("[Update] 启动器不在前台或游戏运行中，已暂缓提示");
+    }
+
+    private static bool IsUserPresentNow()
+    {
+        var main = Launcher.frmMain;
+        if (main is null)
+            return false;
+
+        return !UpdateNotificationRules.ShouldDefer(
+            main.IsActive,
+            main.WindowState == WindowState.Minimized,
+            GameLaunch.isLaunching,
+            HasRunningGame);
+    }
+
+    private static void EnsurePendingTimer(Dispatcher dispatcher)
+    {
+        if (_pendingTimer is not null)
+        {
+            if (!_pendingTimer.IsEnabled)
+                _pendingTimer.Start();
+            return;
+        }
+
+        _pendingTimer = new DispatcherTimer(
+            TimeSpan.FromSeconds(1),
+            DispatcherPriority.Background,
+            (_, _) => FlushPending(),
+            dispatcher);
+        _pendingTimer.Start();
+    }
+
+    private static void FlushPending()
+    {
+        if (!IsUserPresentNow())
+            return;
+
+        Action[] actions;
+        lock (PendingSync)
+        {
+            if (Pending.Count == 0)
+            {
+                _pendingTimer?.Stop();
+                return;
+            }
+
+            actions = [.. Pending];
+            Pending.Clear();
+        }
+
+        foreach (var action in actions)
+        {
+            try
+            {
+                action();
+            }
+            catch (Exception ex)
+            {
+                Common.Log(ex, "[Update] 执行暂缓提示失败", Common.LogLevel.Developer);
+            }
+        }
+    }
+
     public int ShowMessageBox(
         string caption,
         string? title = null,

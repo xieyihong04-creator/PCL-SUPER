@@ -37,6 +37,8 @@ internal static class Program {
             ("instance-clone", InstanceClonePipelineTests.Cases),
             ("mod-dependencies", ModDependencyInspectorPipelineTests.Cases),
             ("installed-index", InstalledResourceIndexTests.Cases),
+            ("github-update", GitHubReleaseRulesTests.Cases),
+            ("update-notify", UpdateNotificationRulesTests.Cases),
             ("wave2-modpack-map", () => Wave2Tests.Cases)
         ];
         if (args.Length == 1 && args[0] == "--list-groups") {

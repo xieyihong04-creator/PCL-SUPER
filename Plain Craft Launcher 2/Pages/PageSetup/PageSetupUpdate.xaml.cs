@@ -47,8 +47,6 @@ public partial class PageSetupUpdate : IPageView
     private void Init()
     {
         Animations.AniBeginControl();
-        TextMirrorCDK.Password = Config.Update.MirrorChyanKey;
-
         ComboSystemUpdateChannel.SelectedIndex = (int)Config.Update.UpdateChannel;
         ComboSystemUpdateMode.SelectedIndex = (int)Config.Update.UpdateMode;
 
@@ -323,19 +321,9 @@ public partial class PageSetupUpdate : IPageView
         }
     }
 
-    private void TextMirrorCDK_PasswordChanged(object sender, EventArgs e)
-    {
-        Config.Update.MirrorChyanKey = TextMirrorCDK.Password;
-    }
-
-    private void BtnGetMirrorCDK_Click(object sender, MouseButtonEventArgs e)
-    {
-        Common.OpenWebsite("https://mirrorchyan.com/");
-    }
-
     private void BtnChangelog_Click(object sender, MouseButtonEventArgs e)
     {
-        Common.OpenWebsite("https://github.com/PCL-Community/PCL2-CE/releases/v" + Common.VersionBaseName);
+        Common.OpenWebsite("https://github.com/xieyihong04-creator/PCL-SUPER/releases");
     }
 
     public string VersionNameFormat(string str) => PageSetupUpdateViewModel.VersionNameFormat(str);

@@ -88,6 +88,10 @@ public sealed partial class StartupService
         var info = new StringBuilder();
         info.Append("\n版本: ").Append(Basics.Metadata.Version).Append(" (").Append(GetArchitectureName(RuntimeInformation.ProcessArchitecture)).Append(')');
         info.Append("\n路径: ").Append(Basics.ExecutablePath);
+        info.Append("\n数据目录: ").Append(Paths.SharedData);
+        if (Paths.LegacyMigrationSource is { } migrationSource)
+            info.Append("（已从 ").Append(migrationSource).Append(" 导入 ")
+                .Append(Paths.LegacyMigrationFileCount).Append(" 个文件）");
         info.Append("\n命令行参数:");
         if (Basics.CommandLineArguments.Length == 0) info.Append(" []");
         else foreach (var x in Basics.CommandLineArguments) info.Append("\n - ").Append(x);

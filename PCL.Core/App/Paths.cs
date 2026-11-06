@@ -50,6 +50,18 @@ public static class Paths
     public static string Temp { get => _temp; set => _temp = value; }
 
     /// <summary>
+    /// 首次启动时从 PCL CE 配置目录导入文件的来源目录，未发生迁移时为 <see langword="null"/>。
+    /// </summary>
+    public static string? LegacyMigrationSource { get; private set; }
+
+    /// <summary>
+    /// 从 PCL CE 配置目录导入的文件数量。
+    /// </summary>
+    public static int LegacyMigrationFileCount { get; private set; }
+
+    internal const string LegacyMigrationMarkerName = ".migrated-from-pclce";
+
+    /// <summary>
     /// Get path string relative to a special folder.
     /// </summary>
     /// <param name="folder">the special folder</param>
@@ -64,11 +76,15 @@ public static class Paths
     static Paths()
     {
 #if DEBUG
-        const string name = "PCLCE_Debug";
-        const string oldName = ".PCLCEDebug";
+        const string name = "PCLSUPER_Debug";
+        const string oldName = ".PCLSUPER_Debug";
+        const string legacyName = "PCLCE_Debug";
+        const string legacyOldName = ".PCLCEDebug";
 #else
-        const string name = "PCLCE";
-        const string oldName = ".PCLCE";
+        const string name = "PCLSUPER";
+        const string oldName = ".PCLSUPER";
+        const string legacyName = "PCLCE";
+        const string legacyOldName = ".PCLCE";
 #endif
         // fill paths
         _data = Path.Combine(DefaultDirectory, "PCL");
@@ -88,5 +104,26 @@ public static class Paths
         Directory.CreateDirectory(_sharedData);
         Directory.CreateDirectory(_sharedLocalData);
         Directory.CreateDirectory(_temp);
+
+        // PCL SUPER 曾与 PCL CE 共用配置目录，首次启动时复制一份到自己的目录（只读来源，不移动不删除）
+        try
+        {
+            var result = LauncherDataMigration.MigrateSharedConfig(
+                _sharedData,
+                Path.Combine(_sharedData, LegacyMigrationMarkerName),
+                [
+                    GetSpecialPath(Special.ApplicationData, legacyName),
+                    GetSpecialPath(Special.ApplicationData, legacyOldName)
+                ]);
+            if (result.Ran)
+            {
+                LegacyMigrationSource = result.SourceDirectory;
+                LegacyMigrationFileCount = result.CopiedFileNames.Count;
+            }
+        }
+        catch (Exception)
+        {
+            // 迁移失败不应阻止启动
+        }
     }
 }

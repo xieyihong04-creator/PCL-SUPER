@@ -106,7 +106,7 @@ public static class UpdateManager
                     SystemInfo.IsArm64System ? UpdateArch.Arm64 : UpdateArch.X64
                 );
 
-                LauncherCommon.WriteFile($"{LauncherPaths.Temp}CEUpdateLog.md", version.Changelog);
+                LauncherCommon.WriteFile($"{LauncherPaths.Temp}SuperUpdateLog.md", version.Changelog);
                 LauncherCommon.Log(
                     $"[Update] 远程最新版本: {version.VersionName}, 当前版本: {LauncherCommon.VersionBaseName}");
                 if (!(SemVer.Parse(version.VersionName)
@@ -338,17 +338,5 @@ public static class UpdateManager
                 LauncherCommon.Log("[Update] 更新设置: 不自动检查更新");
                 return;
         }
-    }
-
-    /// <summary>
-    ///     展示社区版提示
-    /// </summary>
-    /// <param name="IsUpdate">是否为更新时启动</param>
-    public static void ShowCeAnnounce()
-    {
-        UpdateUi.Current?.ShowMessageBox(
-            Lang.Text("Update.CommunityNotice.Body"),
-            Lang.Text("Update.CommunityNotice.Title"),
-            Lang.Text("Update.CommunityNotice.Confirm"));
     }
 }

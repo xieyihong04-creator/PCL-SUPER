@@ -8,8 +8,6 @@ namespace PCL;
 /// <summary>设置页面中「启动器」页的视图模型。</summary>
 public partial class PageSetupLauncherMiscViewModel : ViewModelBase
 {
-    [ObservableProperty] private int _activityIndex = Math.Max(0, States.System.AnnounceSolution);
-
     [ObservableProperty] private string _httpProxyPassword = Config.Network.HttpProxy.CustomPassword;
 
     [ObservableProperty] private string _httpProxyText = Config.Network.HttpProxy.CustomAddress;
@@ -20,7 +18,6 @@ public partial class PageSetupLauncherMiscViewModel : ViewModelBase
 
     public void Reload()
     {
-        ActivityIndex = Math.Max(0, States.System.AnnounceSolution);
         HttpProxyText = Config.Network.HttpProxy.CustomAddress;
         HttpProxyUsername = Config.Network.HttpProxy.CustomUsername;
         HttpProxyPassword = Config.Network.HttpProxy.CustomPassword;

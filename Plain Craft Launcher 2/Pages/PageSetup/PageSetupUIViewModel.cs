@@ -11,8 +11,6 @@ namespace PCL;
 /// <summary>界面个性化设置页的视图模型。</summary>
 public partial class PageSetupUIViewModel : ViewModelBase
 {
-    [ObservableProperty] private Visibility _launcherHideVisibility = Visibility.Collapsed;
-
     [ObservableProperty] private Visibility _backgroundOpacityVisibility = Visibility.Collapsed;
 
     [ObservableProperty] private Visibility _backgroundBlurVisibility = Visibility.Collapsed;
@@ -60,11 +58,6 @@ public partial class PageSetupUIViewModel : ViewModelBase
     public string[] ThemeColors => Basics.IsAprilFool
         ? [Lang.Text("Setup.Ui.Theme.Color.SkyBlue"), Lang.Text("Setup.Ui.Theme.Color.CatBlue"), Lang.Text("Setup.Ui.Theme.Color.CrashBlue"), Lang.Text("Setup.Ui.Theme.Color.Hmcl")]
         : [Lang.Text("Setup.Ui.Theme.Color.SkyBlue"), Lang.Text("Setup.Ui.Theme.Color.CatBlue"), Lang.Text("Setup.Ui.Theme.Color.CrashBlue")];
-
-    public void ShowLauncherHint()
-    {
-        LauncherHideVisibility = Visibility.Visible;
-    }
 
     public void ApplyBackgroundState(bool show, int count)
     {

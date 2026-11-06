@@ -42,8 +42,6 @@ public partial class PageSetupUI : IPageView
         isLoaded = true;
 
         SliderLoad();
-
-        _vm.ShowLauncherHint();
     }
 
     public void OnNavigatedTo(object? parameter)
@@ -694,12 +692,6 @@ public partial class PageSetupUI : IPageView
             return;
         SetByTag(sender.Tag?.ToString(), sender.SelectedIndex);
         ThemeManager.ThemeRefresh();
-    }
-
-    // 赞助
-    private void BtnLauncherDonate_Click(object sender, MouseButtonEventArgs e)
-    {
-        Common.OpenWebsite("https://afdian.com/a/LTCat");
     }
 
     // 滑动条

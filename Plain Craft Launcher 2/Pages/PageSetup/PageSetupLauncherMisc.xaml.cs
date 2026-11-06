@@ -197,26 +197,6 @@ public partial class PageSetupLauncherMisc : IPageView
             HintService.Show(Hints.Info(Lang.Text("Setup.Misc.Debug.Mode.Hint"), log: false));
     }
 
-    // 自动更新
-    private void ComboSystemActivity_SelectionChanged(object sender, SelectionChangedEventArgs e)
-    {
-        if (Animations.AniExitsAnyControl() || sender is not MyComboBox combo || (!combo.IsDropDownOpen && !Keyboard.IsKeyDown(Key.Enter)))
-            return;
-        if (ComboSystemActivity.SelectedIndex != 2)
-            return;
-        if (_vm.Dialog.Show(new TextDialogRequest
-        {
-            Title = Lang.Text("Common.Dialog.Warning"),
-            Content = Lang.Text("Setup.Misc.System.Announcement.Disabled.Warning.Message"),
-            Buttons = DialogButtons.From(
-                DialogButton.Create(Lang.Text("Setup.Misc.System.Announcement.Disabled.Warning.Confirm")),
-                DialogButton.Create(Lang.Text("Common.Action.Cancel"))),
-            IsWarn = true,
-            ForceWait = true
-        }).Result?.Button ==
-            2) ComboSystemActivity.SelectedItem = e.RemovedItems[0];
-    }
-
     private void CheckDebugMode_OnChange(object sender, bool user)
     {
         CheckBoxChange(sender, user);
@@ -227,12 +207,6 @@ public partial class PageSetupLauncherMisc : IPageView
     {
         CheckBoxChange(sender, user);
         Check_DisableHardwareAcceleration(sender, user);
-    }
-
-    private void ComboSystemActivity_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
-    {
-        ComboChange(sender, e);
-        ComboSystemActivity_SelectionChanged(sender, e);
     }
 
     #region 导出 / 导入设置
@@ -268,7 +242,7 @@ public partial class PageSetupLauncherMisc : IPageView
 
     #endregion
 
-    #region 停止使用 PCL CE
+    #region 停止使用 PCL SUPER
 
     private async void BtnSystemStopUsingPclCe_Click(object sender, MouseButtonEventArgs e)
     {
@@ -297,14 +271,14 @@ public partial class PageSetupLauncherMisc : IPageView
         }
         catch (Exception ex)
         {
-            Common.Log(ex, "停止使用 PCL CE 失败", Common.LogLevel.Msgbox,
+            Common.Log(ex, "停止使用 PCL SUPER 失败", Common.LogLevel.Msgbox,
                 userSummary: Lang.Text("Setup.Error.OperationFailed"));
         }
     }
 
     private void StopUsingPClCeCore(bool removeMcResources)
     {
-        // 删除 MC 文件夹内的 PCL CE 配置
+        // 删除 MC 文件夹内的 PCL SUPER 配置
         if (removeMcResources && States.Game.Folders != "")
         {
             foreach (var path in States.Game.Folders.Split('|'))

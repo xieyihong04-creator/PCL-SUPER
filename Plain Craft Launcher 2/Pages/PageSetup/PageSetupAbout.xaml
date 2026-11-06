@@ -59,7 +59,7 @@
                         Margin="3"
                         IsHitTestVisible="{Binding ViewModel.IsLogoClickEnabled, RelativeSource={RelativeSource AncestorType=local:PageSetupAbout}}"
                         MouseLeftButtonDown="ImgPCLLogo_Click"
-                        Source="/Plain Craft Launcher 2;component/Images/Heads/Logo-CE.png">
+                        Source="/Plain Craft Launcher 2;component/Images/icon.png">
                         <Image.Clip>
                             <EllipseGeometry
                                 Center="17 17"
@@ -94,14 +94,14 @@
                         Grid.Row="1"
                         Grid.Column="2"
                         Height="35"
-                        local:CustomEventService.EventData="https://github.com/PCL-Community"
+                        local:CustomEventService.EventData="https://github.com/xieyihong04-creator"
                         local:CustomEventService.EventType="OpenUrl"
                         Text="{loc:Loc Setup.About.GitHubHome}" />
                     <local:MyButton
                         Grid.Row="2"
                         Grid.Column="2"
                         Height="35"
-                        local:CustomEventService.EventData="https://github.com/PCL-Community/PCL2-CE"
+                        local:CustomEventService.EventData="https://github.com/xieyihong04-creator/PCL-SUPER"
                         local:CustomEventService.EventType="OpenUrl"
                         Text="{loc:Loc Setup.About.SourceCode}" />
                 </Grid>
@@ -373,31 +373,35 @@
                         LineHeight="17"
                         Text="{loc:Loc Setup.About.Legal.CopyrightText}"
                         TextWrapping="Wrap" />
-                    <StackPanel
-                        Height="35"
+                    <WrapPanel
                         Margin="0,12,0,0"
-                        HorizontalAlignment="Left"
-                        Orientation="Horizontal">
+                        HorizontalAlignment="Left">
                         <local:MyButton
-                            Margin="0,0,20,0"
+                            Margin="0,0,20,8"
                             ColorType="Highlight"
+                            local:CustomEventService.EventData="https://github.com/xieyihong04-creator/PCL-SUPER"
+                            local:CustomEventService.EventType="OpenUrl"
+                            Padding="13,0"
+                            Text="{loc:Loc Setup.About.Legal.SuperSource}" />
+                        <local:MyButton
+                            Margin="0,0,20,8"
                             local:CustomEventService.EventData="https://github.com/PCL-Community/PCL2-CE"
                             local:CustomEventService.EventType="OpenUrl"
                             Padding="13,0"
                             Text="{loc:Loc Setup.About.Legal.CommunitySource}" />
                         <local:MyButton
-                            Margin="0,0,20,0"
+                            Margin="0,0,20,8"
                             local:CustomEventService.EventData="https://www.pclc.cc/privacy/personal-info-brief.html"
                             local:CustomEventService.EventType="OpenUrl"
                             Padding="13,0"
                             Text="{loc:Loc Setup.About.Legal.CommunityLobbyPrivacy}" />
                         <local:MyButton
-                            Margin="0,0,20,0"
+                            Margin="0,0,20,8"
                             local:CustomEventService.EventData="https://account.naids.com/policy"
                             local:CustomEventService.EventType="OpenUrl"
                             Padding="13,0"
                             Text="{loc:Loc Setup.About.Legal.NatayarkTerms}" />
-                    </StackPanel>
+                    </WrapPanel>
                 </StackPanel>
             </local:MyCard>
             <local:MyCard

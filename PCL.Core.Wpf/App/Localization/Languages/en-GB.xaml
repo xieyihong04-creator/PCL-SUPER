@@ -1762,6 +1762,7 @@
     <sys:String x:Key="Launch.Homepage.News.Loading">Loading...</sys:String>
     <sys:String x:Key="Launch.Homepage.News.ViewDetail">View details</sys:String>
     <sys:String x:Key="Launch.Homepage.Preset.EchoCave.Removed">The Echo Cave preset has been removed as it only had a shell. Please go to Settings and select another homepage preset.</sys:String>
+    <sys:String x:Key="Launch.Homepage.Preset.PclAnnouncement.Removed">The announcement preset has been removed. Please go to Settings and select another homepage preset.</sys:String>
     <sys:String x:Key="Launch.Homepage.SlowWarning">The homepage is loading too slowly ({0} seconds). Please report this issue to the homepage author, or temporarily stop using this homepage.</sys:String>
     <sys:String x:Key="Launch.Homepage.Task.Download">Download homepage</sys:String>
 
@@ -2585,7 +2586,7 @@
 
     <sys:String x:Key="Setup.About.Community.Info">The development team of Plain Craft Launcher Community Edition!</sys:String>
     <sys:String x:Key="Setup.About.Community.Name">PCL Community</sys:String>
-    <sys:String x:Key="Setup.About.Contributors.Title">Contributors</sys:String>
+    <sys:String x:Key="Setup.About.Contributors.Title">Upstream contributors</sys:String>
     <sys:String x:Key="Setup.About.Contributors.ViewMore">View more</sys:String>
     <sys:String x:Key="Setup.About.Error.LoadContributorsFailed">Failed to load contributor information</sys:String>
     <sys:String x:Key="Setup.About.GitHubHome">GitHub page</sys:String>
@@ -2637,6 +2638,7 @@
 
     <sys:String x:Key="Setup.About.Legal.CommunityLobbyPrivacy">Community lobby privacy policy</sys:String>
     <sys:String x:Key="Setup.About.Legal.CommunitySource">PCL CE source code</sys:String>
+    <sys:String x:Key="Setup.About.Legal.SuperSource">PCL SUPER source code</sys:String>
     <sys:String x:Key="Setup.About.Legal.CopyrightText">Copyright © PCL Community &amp; LTCat (龙腾猫跃) 2026.&#xD;NOT AN OFFICIAL MINECRAFT PRODUCT. NOT APPROVED BY OR ASSOCIATED WITH MOJANG OR MICROSOFT.</sys:String>
     <sys:String x:Key="Setup.About.Legal.NatayarkTerms">Natayark OpenID ToS</sys:String>
     <sys:String x:Key="Setup.About.Legal.OtherInfo">Other information</sys:String>
@@ -2837,7 +2839,7 @@
     <sys:String x:Key="Setup.Language.Banner.TitlePrefix">Let</sys:String>
     <sys:String x:Key="Setup.Language.Banner.TitleSuffix">Go Internationalised.</sys:String>
     <sys:String x:Key="Setup.Language.Banner.DescriptionLine1">With the support of the community, PCL SUPER is entering a new chapter in its journey towards internationalisation.</sys:String>
-    <sys:String x:Key="Setup.Language.Banner.DescriptionLine2">You can help shape that journey by contributing on our translation platform or submitting pull requests to our GitHub repository, making PCL SUPER more accessible to users around the world.</sys:String>
+    <sys:String x:Key="Setup.Language.Banner.DescriptionLine2">You can help shape that journey by submitting pull requests to our GitHub repository, making PCL SUPER more accessible to users around the world.</sys:String>
     <sys:String x:Key="Setup.Language.Banner.DescriptionLine3">Thank you to everyone who contributes translations, reviews, and improvements—your support makes PCL SUPER better for everyone.</sys:String>
     <sys:String x:Key="Setup.Language.Banner.TranslateWebsite">Visit translation platform</sys:String>
     <sys:String x:Key="Setup.Language.Banner.SubmitPullRequest">Submit pull request</sys:String>
@@ -3243,7 +3245,7 @@
     <sys:String x:Key="Setup.Ui.Homepage.Preset.Bangumi">Bangumi Anime (Author: wzyaeu)</sys:String>
     <sys:String x:Key="Setup.Ui.Homepage.Preset.OpenBmclapi">OpenBMCLAPI Dashboard Lite (Authors: Silverteal, Mxmilu666)</sys:String>
     <sys:String x:Key="Setup.Ui.Homepage.Preset.OpenMcim">OpenMCIM Dashboard (Author: SALTWOOD)</sys:String>
-    <sys:String x:Key="Setup.Ui.Homepage.Preset.PclAnnouncement">PCL SUPER Announcements</sys:String>
+    <sys:String x:Key="Setup.Ui.Homepage.Preset.PclAnnouncement">PCL SUPER Announcements (removed)</sys:String>
     <sys:String x:Key="Setup.Ui.Homepage.Preset.PclManual">PCL New Feature Manual (Author: WForst-Breeze)</sys:String>
     <sys:String x:Key="Setup.Ui.Homepage.Preset.PclMarket">PCL Homepage Market (Author: MoYuan-CN)</sys:String>
     <sys:String x:Key="Setup.Ui.Homepage.Preset.PclNews">PCL News Bulletin (Author: Joker2184)</sys:String>

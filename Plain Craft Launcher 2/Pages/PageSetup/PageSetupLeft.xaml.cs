@@ -181,7 +181,7 @@ public partial class PageSetupLeft : IPageView
                 }
                 case 2:
                 {
-                    Common.OpenWebsite("https://github.com/PCL-Community/PCL2-CE/issues/");
+                    Common.OpenWebsite("https://github.com/xieyihong04-creator/PCL-SUPER/issues/");
                     break;
                 }
             }

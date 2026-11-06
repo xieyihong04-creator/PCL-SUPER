@@ -318,10 +318,15 @@ public partial class PageLaunchRight : IRefreshable
                     break;
                 
                 case 14:
-                    LogWrapper.Info("[Page] 主页预设：PCL CE 公告栏");
-                    url = "https://s3.pysio.online/pcl2-ce/apiv2/pages/announce.xaml";
-                    content = LoadFromNetwork(url);
-                    break;
+                    LogWrapper.Info("[Page] 主页预设：公告栏 已被移除");
+                    DialogService.Instance.Show(new TextDialogRequest
+                    {
+                        Title = Lang.Text("Common.Dialog.Title"),
+                        Content = Lang.Text("Launch.Homepage.Preset.PclAnnouncement.Removed"),
+                        Buttons = DialogButtons.Ok,
+                        ForceWait = true
+                    });
+                    return;
                 
                 case 15:
                     LogWrapper.Info("[Page] 主页预设：Minecraft 信息流");

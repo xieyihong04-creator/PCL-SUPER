@@ -1762,6 +1762,7 @@
     <sys:String x:Key="Launch.Homepage.News.Loading">載入中……</sys:String>
     <sys:String x:Key="Launch.Homepage.News.ViewDetail">檢視詳情</sys:String>
     <sys:String x:Key="Launch.Homepage.Preset.EchoCave.Removed">回聲洞 因為只有空殼因此已被移除，請前往設定選擇其他預設首頁</sys:String>
+    <sys:String x:Key="Launch.Homepage.Preset.PclAnnouncement.Removed">公告欄預設已移除，請前往設定選擇其他預設首頁</sys:String>
     <sys:String x:Key="Launch.Homepage.SlowWarning">首頁載入過於緩慢（花費了 {0} 秒），請向首頁作者回饋此問題，或暫時停止使用該首頁</sys:String>
     <sys:String x:Key="Launch.Homepage.Task.Download">下載首頁</sys:String>
 
@@ -2585,7 +2586,7 @@
 
     <sys:String x:Key="Setup.About.Community.Info">Plain Craft Launcher Community Edition 的開發團隊！</sys:String>
     <sys:String x:Key="Setup.About.Community.Name">PCL Community</sys:String>
-    <sys:String x:Key="Setup.About.Contributors.Title">貢獻者們</sys:String>
+    <sys:String x:Key="Setup.About.Contributors.Title">上游貢獻者</sys:String>
     <sys:String x:Key="Setup.About.Contributors.ViewMore">檢視更多</sys:String>
     <sys:String x:Key="Setup.About.Error.LoadContributorsFailed">載入貢獻者資訊失敗</sys:String>
     <sys:String x:Key="Setup.About.GitHubHome">GitHub 首頁</sys:String>
@@ -2637,6 +2638,7 @@
 
     <sys:String x:Key="Setup.About.Legal.CommunityLobbyPrivacy">PCL CE 連線大廳隱私政策</sys:String>
     <sys:String x:Key="Setup.About.Legal.CommunitySource">PCL CE 開放原始碼</sys:String>
+    <sys:String x:Key="Setup.About.Legal.SuperSource">PCL SUPER 開放原始碼</sys:String>
     <sys:String x:Key="Setup.About.Legal.CopyrightText">Copyright © 2026 PCL Community &amp; 龙腾猫跃.&#xD;非 MINECRAFT 官方產品。未經 MOJANG 或 MICROSOFT 批准，也不與 MOJANG 或 MICROSOFT 關聯。</sys:String>
     <sys:String x:Key="Setup.About.Legal.NatayarkTerms">Natayark OpenID 服務條款</sys:String>
     <sys:String x:Key="Setup.About.Legal.OtherInfo">其他資訊</sys:String>
@@ -2837,7 +2839,7 @@
     <sys:String x:Key="Setup.Language.Banner.TitlePrefix">讓</sys:String>
     <sys:String x:Key="Setup.Language.Banner.TitleSuffix">走向國際化。</sys:String>
     <sys:String x:Key="Setup.Language.Banner.DescriptionLine1">在社群的共同助力下，PCL SUPER 正邁向國際化的新篇章。</sys:String>
-    <sys:String x:Key="Setup.Language.Banner.DescriptionLine2">歡迎前往翻譯平台參與在地化貢獻，或向 GitHub 倉庫提交 Pull Request，與我們一同完善多語言支援，為 PCL SUPER 更好地服務全球使用者的目標添磚加瓦。</sys:String>
+    <sys:String x:Key="Setup.Language.Banner.DescriptionLine2">歡迎向 GitHub 倉庫提交 Pull Request，與我們一同完善多語言支援，為 PCL SUPER 更好地服務全球使用者的目標添磚加瓦。</sys:String>
     <sys:String x:Key="Setup.Language.Banner.DescriptionLine3">感謝每一位參與翻譯、校對與改進的貢獻者，讓 PCL SUPER 因你們而更加完善。</sys:String>
     <sys:String x:Key="Setup.Language.Banner.TranslateWebsite">前往翻譯平台</sys:String>
     <sys:String x:Key="Setup.Language.Banner.SubmitPullRequest">提交 Pull Request</sys:String>
@@ -3243,7 +3245,7 @@
     <sys:String x:Key="Setup.Ui.Homepage.Preset.Bangumi">Bangumi 番劇首頁（作者：wzyaeu）</sys:String>
     <sys:String x:Key="Setup.Ui.Homepage.Preset.OpenBmclapi">OpenBMCLAPI 儀錶板 Lite（作者：Silverteal、Mxmilu666）</sys:String>
     <sys:String x:Key="Setup.Ui.Homepage.Preset.OpenMcim">OpenMCIM 儀錶板（作者：SALTWOOD）</sys:String>
-    <sys:String x:Key="Setup.Ui.Homepage.Preset.PclAnnouncement">PCL SUPER 公告</sys:String>
+    <sys:String x:Key="Setup.Ui.Homepage.Preset.PclAnnouncement">PCL SUPER 公告（已移除）</sys:String>
     <sys:String x:Key="Setup.Ui.Homepage.Preset.PclManual">PCL 新功能說明書（作者：WForst-Breeze）</sys:String>
     <sys:String x:Key="Setup.Ui.Homepage.Preset.PclMarket">PCL 首頁市場（作者：凌雲）</sys:String>
     <sys:String x:Key="Setup.Ui.Homepage.Preset.PclNews">PCL 新聞速報（作者：Joker2184）</sys:String>

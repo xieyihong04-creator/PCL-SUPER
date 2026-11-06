@@ -8,7 +8,7 @@
 
 A personal build based on [PCL-CE](https://github.com/PCL-Community/PCL-CE), with features ported from [PCL-Living-Fork](https://github.com/DDZmumo/PCL-Living-Fork).
 
-**Status**: validated on real Windows x64 hardware with defects fixed; current version 2.15.1. 464 of 469 migration tests pass (the 5 failures are caused by non-admin restrictions on creating symbolic links).
+**Status**: validated on real Windows x64 hardware with defects fixed; current version 2.15.2. 464 of 469 migration tests pass (the 5 failures are caused by non-admin restrictions on creating symbolic links).
 
 </div>
 

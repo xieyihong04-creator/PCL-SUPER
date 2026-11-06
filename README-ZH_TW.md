@@ -8,7 +8,7 @@
 
 以 [PCL-CE](https://github.com/PCL-Community/PCL-CE) 為基底，移植 [PCL-Living-Fork](https://github.com/DDZmumo/PCL-Living-Fork) 功能的個人建置。
 
-**狀態**：已在 Windows x64 實機驗收並修正缺陷，目前版本 2.15.1；469 項遷移測試中 464 項通過（5 項因非管理員無法建立符號連結而失敗）。
+**狀態**：已在 Windows x64 實機驗收並修正缺陷，目前版本 2.15.2；469 項遷移測試中 464 項通過（5 項因非管理員無法建立符號連結而失敗）。
 
 </div>
 

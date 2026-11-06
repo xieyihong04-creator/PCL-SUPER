@@ -320,6 +320,7 @@
     <sys:String x:Key="Download.Comp.Link.ResolveFailed">未能识别或获取该资源链接</sys:String>
     <sys:String x:Key="Download.Comp.Search.Hint">搜索资源</sys:String>
     <sys:String x:Key="Download.Comp.Sort.Downloads">下载量</sys:String>
+    <sys:String x:Key="Download.Comp.Installed">已安装</sys:String>
     <sys:String x:Key="Download.Comp.Sort.Follows">关注量</sys:String>
     <sys:String x:Key="Download.Comp.Sort.Latest">最新发布</sys:String>
     <sys:String x:Key="Download.Comp.Sort.Relevance">相关性</sys:String>

@@ -278,6 +278,7 @@
     <sys:String x:Key="Download.Comp.Link.ResolveFailed">未能識別或取得該資源連結</sys:String>
     <sys:String x:Key="Download.Comp.Search.Hint">搜尋資源</sys:String>
     <sys:String x:Key="Download.Comp.Sort.Downloads">下載量</sys:String>
+    <sys:String x:Key="Download.Comp.Installed">已安裝</sys:String>
     <sys:String x:Key="Download.Comp.Sort.Follows">關注量</sys:String>
     <sys:String x:Key="Download.Comp.Sort.Latest">最新發布</sys:String>
     <sys:String x:Key="Download.Comp.Sort.Relevance">相關性</sys:String>

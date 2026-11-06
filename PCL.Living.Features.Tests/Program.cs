@@ -36,6 +36,7 @@ internal static class Program {
             ("environment-history", EnvironmentHistoryPipelineTests.Cases),
             ("instance-clone", InstanceClonePipelineTests.Cases),
             ("mod-dependencies", ModDependencyInspectorPipelineTests.Cases),
+            ("installed-index", InstalledResourceIndexTests.Cases),
             ("wave2-modpack-map", () => Wave2Tests.Cases)
         ];
         if (args.Length == 1 && args[0] == "--list-groups") {

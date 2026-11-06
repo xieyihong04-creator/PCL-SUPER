@@ -71,8 +71,29 @@ public partial class PageDownloadCompDetail : IPageView
         // 决定按钮显示
         _vm.ApplyProjectState(_project);
         RefreshFavoriteButton();
+        ApplyInstalledBadge(_compItem, _project);
 
         Animations.AniEndControl();
+    }
+
+    /// <summary>异步在详情页顶部标记该资源已安装到所选实例。</summary>
+    private static async void ApplyInstalledBadge(MyCompItem item, Comp.CompProject project)
+    {
+        var instance = InstanceList.McMcInstanceSelected;
+        if (instance is null || !InstalledCompIndex.IsSupported(project.Type))
+            return;
+
+        try
+        {
+            var ids = await InstalledCompIndex.GetInstalledProjectIdsAsync(instance, project.Type);
+            if (!ids.Contains(project.Id))
+                return;
+            Common.RunInUi(() => item.ShowInstalled = true);
+        }
+        catch (Exception ex)
+        {
+            Common.Log(ex, "[Comp] 应用详情页「已安装」标签失败", Common.LogLevel.Developer);
+        }
     }
 
     // 整合包安装

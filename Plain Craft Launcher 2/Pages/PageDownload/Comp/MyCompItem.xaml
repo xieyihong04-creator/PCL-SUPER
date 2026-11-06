@@ -42,6 +42,13 @@
                    Text="{Binding ViewModel.SubTitleText, ElementName=PanBack}"
                    Foreground="{StaticResource ColorBrushGray1}" Opacity="0.4" VerticalAlignment="Center"
                    Visibility="{Binding ViewModel.SubTitleVisibility, ElementName=PanBack}" />
+        <!-- 已安装标签 -->
+        <Border x:Name="PanInstalled" Margin="7,0,0,0" Padding="5,1" CornerRadius="3"
+                Background="{DynamicResource ColorBrush6}" VerticalAlignment="Center"
+                IsHitTestVisible="False" Visibility="Collapsed">
+            <TextBlock Text="{loc:Loc Download.Comp.Installed}" FontSize="11"
+                       Foreground="{DynamicResource ColorBrush2}" />
+        </Border>
     </StackPanel>
     <!-- Tag 与 详情 -->
     <StackPanel x:Name="PanTags" Grid.Row="2" Grid.Column="3" Orientation="Horizontal" VerticalAlignment="Center"

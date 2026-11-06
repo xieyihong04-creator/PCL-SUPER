@@ -278,6 +278,7 @@
     <sys:String x:Key="Download.Comp.Link.ResolveFailed">Could not recognise or fetch the resource link</sys:String>
     <sys:String x:Key="Download.Comp.Search.Hint">Search resources</sys:String>
     <sys:String x:Key="Download.Comp.Sort.Downloads">Downloads</sys:String>
+    <sys:String x:Key="Download.Comp.Installed">Installed</sys:String>
     <sys:String x:Key="Download.Comp.Sort.Follows">Follows</sys:String>
     <sys:String x:Key="Download.Comp.Sort.Latest">Latest</sys:String>
     <sys:String x:Key="Download.Comp.Sort.Relevance">Relevance</sys:String>

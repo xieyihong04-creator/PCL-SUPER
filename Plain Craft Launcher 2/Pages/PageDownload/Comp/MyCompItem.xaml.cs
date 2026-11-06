@@ -212,6 +212,13 @@ public partial class MyCompItem
         }
     }
 
+    /// <summary>是否显示「已安装」标签。</summary>
+    public bool ShowInstalled
+    {
+        get => PanInstalled.Visibility == Visibility.Visible;
+        set => PanInstalled.Visibility = value ? Visibility.Visible : Visibility.Collapsed;
+    }
+
     // 快速下载按钮
     public bool ShowDownloadBtn
     {

@@ -41,6 +41,7 @@ public partial class PageComp
                     (PageType == Comp.CompType.Mod || PageType == Comp.CompType.ModPack),
                     showQuickDownload));
             }
+            ApplyInstalledBadges();
             // 页码
             _vm.ApplyPagerState(page, storage);
             // 错误信息
@@ -342,6 +343,35 @@ public partial class PageComp
         catch
         {
             return false;
+        }
+    }
+
+    /// <summary>异步标记当前页中已安装到所选实例的资源。</summary>
+    private async void ApplyInstalledBadges()
+    {
+        var instance = InstanceList.McMcInstanceSelected;
+        var type = PageType;
+        if (instance is null || !InstalledCompIndex.IsSupported(type))
+            return;
+
+        try
+        {
+            var ids = await InstalledCompIndex.GetInstalledProjectIdsAsync(instance, type);
+            if (ids.Count == 0)
+                return;
+
+            Common.RunInUi(() =>
+            {
+                if (PageType != type)
+                    return;
+                foreach (var child in PanProjects.Children)
+                    if (child is MyCompItem { Tag: Comp.CompProject project } item)
+                        item.ShowInstalled = ids.Contains(project.Id);
+            });
+        }
+        catch (Exception ex)
+        {
+            Common.Log(ex, "[Comp] 应用「已安装」标签失败", Common.LogLevel.Developer);
         }
     }
 
